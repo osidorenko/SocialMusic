@@ -1,4 +1,4 @@
-package by.bsuir.spp_project.entity;
+package by.bsuir.spp_project.entity.music;
 
 public enum Gengre {
     DEFAULT,
