@@ -1,20 +1,37 @@
 package by.bsuir.spp_project.entity.music;
 
+import javax.persistence.Entity;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "songs")
 public class Song {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "author")
     private String author;
+
+    @Column(name = "lasting")
     private Double lasting;
+
+    @Column(name = "raiting")
     private Double raiting;
-    private Gengre gengre;
+
+    @Column(name = "gengre")
+    private String gengre;
 
     public Song(Integer id, String name, String author, Double lasting) {
         this.id = id;
         this.name = name;
         this.author = author;
         this.lasting = lasting;
-        this.gengre = Gengre.DEFAULT;
+        this.gengre = Gengre.DEFAULT.toString();
     }
 
     public Double getRaiting() {
@@ -31,7 +48,7 @@ public class Song {
         this.author = author;
         this.lasting = lasting;
         this.raiting = raiting;
-        this.gengre = Gengre.DEFAULT;
+        this.gengre = Gengre.DEFAULT.toString();
     }
 
     public Song() {
@@ -70,11 +87,11 @@ public class Song {
         this.lasting = lasting;
     }
 
-    public Gengre getGengre() {
+    public String getGengre() {
         return gengre;
     }
 
-    public void setGengre(Gengre gengre) {
+    public void setGengre(String gengre) {
         this.gengre = gengre;
     }
 

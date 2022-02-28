@@ -1,8 +1,21 @@
 package by.bsuir.spp_project.entity.social;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class User {
+    //todo normal types for any tables of db and test all function
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "pngName")
     private String pngName;
 
     public User() {

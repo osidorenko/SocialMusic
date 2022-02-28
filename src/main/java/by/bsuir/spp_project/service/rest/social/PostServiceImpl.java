@@ -1,6 +1,6 @@
 package by.bsuir.spp_project.service.rest.social;
 
-import by.bsuir.spp_project.dao.H2DAO;
+import by.bsuir.spp_project.dao.PostgreSQLDAO;
 
 import by.bsuir.spp_project.entity.social.Post;
 import by.bsuir.spp_project.service.rest.RestService;
@@ -20,8 +20,8 @@ public class PostServiceImpl implements RestService {
     private static final AtomicInteger POST_ID_HOLDER = new AtomicInteger();
 
     @Autowired
-    @Qualifier("postH2DAO")
-    private H2DAO postDAO;
+    @Qualifier("postDAO")
+    private PostgreSQLDAO postDAO;
 
     private List<Object> posts;
 
@@ -39,16 +39,21 @@ public class PostServiceImpl implements RestService {
     }
 
     @PreDestroy
-    private void destroy() {
-        int i = posts.size();
+    public void destroy() {
+        int i = 0;
+        if (posts != null) {
+            i = posts.size();
+        }
+        ArrayList<Post> rep = new ArrayList<>(POST_REP_MAP.values());
         while (i < POST_ID_HOLDER.get()) {
-            if (POST_REP_MAP.containsKey(i)) {
-                postDAO.create(POST_REP_MAP.get(i));
+            if (POST_REP_MAP.containsKey(i + 1)) {
+                Post post = (Post) rep.get(i);
+                post.setId(i + 1);
+                postDAO.create(post);
             }
             i++;
         }
     }
-
 
     @Override
     public void create(Object object) {

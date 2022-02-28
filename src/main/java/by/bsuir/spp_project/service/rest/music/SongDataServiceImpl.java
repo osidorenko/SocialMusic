@@ -1,6 +1,6 @@
 package by.bsuir.spp_project.service.rest.music;
 
-import by.bsuir.spp_project.dao.H2DAO;
+import by.bsuir.spp_project.dao.PostgreSQLDAO;
 import by.bsuir.spp_project.entity.music.SongData;
 import by.bsuir.spp_project.service.rest.RestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +18,42 @@ public class SongDataServiceImpl implements RestService {
     private static final AtomicInteger SONG_DATA_ID_HOLDER = new AtomicInteger();
 
     @Autowired
-    @Qualifier("songDataH2DAO")
-    private H2DAO songdataDAO;
+    @Qualifier("songDataDAO")
+    private PostgreSQLDAO songdataDAO;
 
     private List<Object> songsdata;
 
+    /*
+        @PostConstruct
+        private void init() {
+            songs = songDAO.readAll();
+            if (songs != null && !songs.isEmpty()) {
+                Iterator iterator = songs.iterator();
+                while (iterator.hasNext()) {
+                    Song song = (Song) iterator.next();
+                    SONG_REP_MAP.put(song.getId(), song);
+                }
+                SONG_ID_HOLDER.set(songs.size());
+            }
+        }
+
+        @PreDestroy
+        public void destroy() {
+            int i = 0;
+            if (songs != null) {
+                i = songs.size();
+            }
+            ArrayList<Song> rep = new ArrayList<>(SONG_REP_MAP.values());
+            while (i < SONG_ID_HOLDER.get()) {
+                if (SONG_REP_MAP.containsKey(i + 1)) {
+                    Song song = (Song) rep.get(i);
+                    song.setId(i + 1);
+                    songDAO.create(song);
+                }
+                i++;
+            }
+        }
+    */
     @PostConstruct
     private void init() {
         songsdata = songdataDAO.readAll();
@@ -37,11 +68,17 @@ public class SongDataServiceImpl implements RestService {
     }
 
     @PreDestroy
-    private void destroy() {
-        int i = songsdata.size();
+    public void destroy() {
+        int i = 0;
+        if (songsdata != null) {
+            i = songsdata.size();
+        }
+        ArrayList<SongData> rep = new ArrayList<>(SONG_DATA_REP_MAP.values());
         while (i < SONG_DATA_ID_HOLDER.get()) {
-            if (SONG_DATA_REP_MAP.containsKey(i)) {
-                songdataDAO.create(SONG_DATA_REP_MAP.get(i));
+            if (SONG_DATA_REP_MAP.containsKey(i + 1)) {
+                SongData song = (SongData) rep.get(i);
+                song.setId(i + 1);
+                songdataDAO.create(song);
             }
             i++;
         }

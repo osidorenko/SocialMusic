@@ -1,6 +1,6 @@
 package by.bsuir.spp_project.service.rest.music;
 
-import by.bsuir.spp_project.dao.H2DAO;
+import by.bsuir.spp_project.dao.PostgreSQLDAO;
 import by.bsuir.spp_project.entity.music.Song;
 import by.bsuir.spp_project.service.rest.RestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
+
 public class SongServiceImpl implements RestService {
     //todo trace exception for equals of types???
 
@@ -20,8 +21,8 @@ public class SongServiceImpl implements RestService {
     private static final AtomicInteger SONG_ID_HOLDER = new AtomicInteger();
 
     @Autowired
-    @Qualifier("songH2DAO")
-    private H2DAO songDAO;
+    @Qualifier("songDAO")
+    private PostgreSQLDAO songDAO;
 
     private List<Object> songs;
 
@@ -39,12 +40,17 @@ public class SongServiceImpl implements RestService {
     }
 
     @PreDestroy
-    private void destroy() {
-        int i = songs.size();
+    public void destroy() {
+        int i = 0;
+        if (songs != null) {
+            i = songs.size();
+        }
+        ArrayList<Song> rep = new ArrayList<>(SONG_REP_MAP.values());
         while (i < SONG_ID_HOLDER.get()) {
-
-            if (SONG_REP_MAP.containsKey(i)) {
-                songDAO.create(SONG_REP_MAP.get(i));
+            if (SONG_REP_MAP.containsKey(i + 1)) {
+                Song song = (Song) rep.get(i);
+                song.setId(i + 1);
+                songDAO.create(song);
             }
             i++;
         }
@@ -52,7 +58,7 @@ public class SongServiceImpl implements RestService {
 
 /*
     @Autowired
-    public SongServiceImpl(@Qualifier("songH2DAO") H2DAO songDAO) {
+    public SongServiceImpl(@Qualifier("songH2DAO") PostgreSQLDAO songDAO) {
         songs = songDAO.readAll();
         int i = 0;
         Iterator iterator = songs.iterator();

@@ -1,10 +1,25 @@
 package by.bsuir.spp_project.entity.music;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "songsdata")
 public class SongData {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "songId")
     private Integer songId;
+
+    @Column(name = "authorId")
     private Integer authorId;
+
+    @Column(name = "songName")
     private String songName;
+
+    @Column(name = "pngName")
     private String pngName;
 
     public SongData() {

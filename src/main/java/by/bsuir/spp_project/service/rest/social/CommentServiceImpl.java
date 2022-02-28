@@ -1,12 +1,11 @@
 package by.bsuir.spp_project.service.rest.social;
 
-import by.bsuir.spp_project.dao.H2DAO;
+import by.bsuir.spp_project.dao.PostgreSQLDAO;
 
 import by.bsuir.spp_project.entity.social.Comment;
 import by.bsuir.spp_project.service.rest.RestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -21,8 +20,8 @@ public class CommentServiceImpl implements RestService {
     private static final AtomicInteger COMMENT_ID_HOLDER = new AtomicInteger();
 
     @Autowired
-    @Qualifier("commentH2DAO")
-    private H2DAO commentDAO;
+    @Qualifier("commentDAO")
+    private PostgreSQLDAO commentDAO;
 
     private List<Object> comments;
 
@@ -40,16 +39,21 @@ public class CommentServiceImpl implements RestService {
     }
 
     @PreDestroy
-    private void destroy() {
-        int i = comments.size();
+    public void destroy() {
+        int i = 0;
+        if (comments != null) {
+            i = comments.size();
+        }
+        ArrayList<Comment> rep = new ArrayList<>(COMMENT_REP_MAP.values());
         while (i < COMMENT_ID_HOLDER.get()) {
-            if (COMMENT_REP_MAP.containsKey(i)) {
-                commentDAO.create(COMMENT_REP_MAP.get(i));
+            if (COMMENT_REP_MAP.containsKey(i + 1)) {
+                Comment com = (Comment) rep.get(i);
+                com.setId(i + 1);
+                commentDAO.create(com);
             }
             i++;
         }
     }
-
 
     @Override
     public void create(Object object) {

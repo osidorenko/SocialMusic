@@ -1,0 +1,54 @@
+PostgreSQL 13
+
+CREATE DATABASE socialmusic
+    WITH
+    OWNER = music_admin
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Russian_Russia.1251'
+    LC_CTYPE = 'Russian_Russia.1251'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+CREATE TABLE IF NOT EXISTS public.songs
+(
+  id SERIAL NOT NULL,
+  name character varying(50) COLLATE pg_catalog."default",
+  author character varying(50) COLLATE pg_catalog."default",
+  lasting numeric,
+  raiting numeric,
+  gengre character varying(30) COLLATE pg_catalog."default",
+  CONSTRAINT songs_pkey PRIMARY KEY (id)
+);
+
+
+
+CREATE TABLE IF NOT EXISTS public.songsdata
+(
+    id integer NOT NULL,
+    "songId" integer NOT NULL,
+    "authorId" integer NOT NULL,
+    "songName" character varying(256) COLLATE pg_catalog."default",
+    "pngName" character varying(256) COLLATE pg_catalog."default",
+    CONSTRAINT songsdata_pkey PRIMARY KEY (id)
+)
+CREATE TABLE IF NOT EXISTS public.posts
+(
+    id integer NOT NULL,
+    "authorId" integer NOT NULL,
+    message character varying(500) COLLATE pg_catalog."default",
+    "pngName" character varying(256) COLLATE pg_catalog."default",
+    "songName" character varying(256) COLLATE pg_catalog."default",
+    date date NOT NULL,
+    CONSTRAINT posts_pkey PRIMARY KEY (id)
+)
+
+CREATE TABLE IF NOT EXISTS public.comments
+(
+    id integer NOT NULL,
+    "postId" integer NOT NULL,
+    "authorId" integer NOT NULL,
+    date date NOT NULL,
+    message character varying(200) COLLATE pg_catalog."default",
+    author character varying(50) COLLATE pg_catalog."default",
+    CONSTRAINT comments_pkey PRIMARY KEY (id)
+)

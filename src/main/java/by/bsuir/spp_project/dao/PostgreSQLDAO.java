@@ -2,11 +2,11 @@ package by.bsuir.spp_project.dao;
 
 import java.util.List;
 
-public interface H2DAO {
+public interface PostgreSQLDAO {
 
     public void create(Object object);
 
-    public List<Object> readAll();
+    public List readAll();
 
     public Object readById(int id);
 

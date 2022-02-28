@@ -1,13 +1,23 @@
 package by.bsuir.spp_project.entity.social;
 
+import javax.persistence.*;
 import java.util.Date;
-
+@Entity
+@Table(name = "comments")
 public class Comment {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "postId")
     private Integer postId;
+    @Column(name = "authorId")
     private Integer authorId;
+    @Column(name = "date")
     private Date date;
+    @Column(name = "message")
     private String message;
+    @Column(name = "author")
     private String author;
 
     public Comment() {

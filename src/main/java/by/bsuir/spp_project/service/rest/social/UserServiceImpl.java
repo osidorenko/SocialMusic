@@ -1,6 +1,6 @@
 package by.bsuir.spp_project.service.rest.social;
 
-import by.bsuir.spp_project.dao.H2DAO;
+import by.bsuir.spp_project.dao.PostgreSQLDAO;
 import by.bsuir.spp_project.entity.social.User;
 import by.bsuir.spp_project.service.rest.RestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,8 @@ public class UserServiceImpl implements RestService {
     private static final AtomicInteger USER_ID_HOLDER = new AtomicInteger();
 
     @Autowired
-    @Qualifier("userH2DAO")
-    private H2DAO userDAO;
+    @Qualifier("userDAO")
+    private PostgreSQLDAO userDAO;
 
     private List<Object> users;
 
@@ -38,16 +38,21 @@ public class UserServiceImpl implements RestService {
     }
 
     @PreDestroy
-    private void destroy() {
-        int i = users.size();
+    public void destroy() {
+        int i = 0;
+        if (users != null) {
+            i = users.size();
+        }
+        ArrayList<User> rep = new ArrayList<>(USER_REP_MAP.values());
         while (i < USER_ID_HOLDER.get()) {
-            if (USER_REP_MAP.containsKey(i)) {
-                userDAO.create(USER_REP_MAP.get(i));
+            if (USER_REP_MAP.containsKey(i + 1)) {
+                User user = (User) rep.get(i);
+                user.setId(i + 1);
+                userDAO.create(user);
             }
             i++;
         }
     }
-
 
     @Override
     public void create(Object object) {

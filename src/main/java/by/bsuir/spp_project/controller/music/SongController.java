@@ -25,6 +25,11 @@ public class SongController {
         songService.create(song);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+    @PostMapping(value = "/songs/stop")
+    public ResponseEntity<?> delete() {
+        songService.destroy();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @GetMapping(value = "/songs")
     public ResponseEntity<List<Song>> read() {
