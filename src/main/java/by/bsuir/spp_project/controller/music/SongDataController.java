@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -70,9 +71,29 @@ public class SongDataController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    //todo release methods for id song
-    @GetMapping(value = "/songs/data/tosong/{id}")
+
+    @GetMapping(value = "/songs/data/to/song/{id}")
     public ResponseEntity<SongData> readToSong(@PathVariable(name = "id") int id) {
-        return null;
+        List o = songDataService.getByValue("song_id", id);
+        SongData songData = (SongData) o.get(o.size() - 1);
+        return songData != null ?
+                new ResponseEntity<>(songData, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value = "/songs/data/to/author/{id}")
+    public ResponseEntity<List<SongData>> readToAuthor(@PathVariable(name = "id") int id) {
+        Object o = songDataService.getByValue("author_id", id);
+        final List<SongData> songsdata = new ArrayList<>();
+        List list = (List) o;
+        if (list.size() > 0) {
+            Iterator iterator = list.iterator();
+            while (iterator.hasNext()) {
+                songsdata.add((SongData) iterator.next());
+            }
+        }
+        return !songsdata.isEmpty() ?
+                new ResponseEntity<>(songsdata, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

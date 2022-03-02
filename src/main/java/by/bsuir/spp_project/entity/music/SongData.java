@@ -3,23 +3,23 @@ package by.bsuir.spp_project.entity.music;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "songsdata")
+@Table(name = "songs_data")
 public class SongData {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "songId")
+    @Column(name = "song_id")
     private Integer songId;
 
-    @Column(name = "authorId")
+    @Column(name = "author_id")
     private Integer authorId;
 
-    @Column(name = "songName")
+    @Column(name = "song_name")
     private String songName;
 
-    @Column(name = "pngName")
+    @Column(name = "png_name")
     private String pngName;
 
     public SongData() {
@@ -33,6 +33,7 @@ public class SongData {
         this.songName = songName;
         this.pngName = pngName;
     }
+
 
     public Integer getId() {
         return id;
@@ -72,5 +73,16 @@ public class SongData {
 
     public void setPngName(String pngName) {
         this.pngName = pngName;
+    }
+
+    @Override
+    public String toString() {
+        return "SongData{" +
+                "id:" + id +
+                ", songId:" + songId +
+                ", authorId:" + authorId +
+                ", songName:'" + songName + '\'' +
+                ", pngName:'" + pngName + '\'' +
+                '}';
     }
 }

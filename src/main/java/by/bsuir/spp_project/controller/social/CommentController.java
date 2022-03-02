@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 public class CommentController {
+    //todo test!!!
     private final CommentServiceImpl commentService;
 
     @Autowired
@@ -69,14 +70,35 @@ public class CommentController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    //todo comments for author and post ect... see class
-    @GetMapping(value = "/comments/toauthor/{id}")
-    public ResponseEntity<Comment> readToAuthor(@PathVariable(name = "id") int id) {
-        return null;
+    @GetMapping(value = "/comments/to/author/{id}")
+    public ResponseEntity<List<Comment>> readToAuthor(@PathVariable(name = "id") int id) {
+        Object o = commentService.getByValue("author_id", id);
+        final List<Comment> comments = new ArrayList<>();
+        List list = (List) o;
+        if (list.size() > 0) {
+            Iterator iterator = list.iterator();
+            while (iterator.hasNext()) {
+                comments.add((Comment) iterator.next());
+            }
+        }
+        return !comments.isEmpty() ?
+                new ResponseEntity<>(comments, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/comments/topost/{id}")
-    public ResponseEntity<Comment> readToPost(@PathVariable(name = "id") int id) {
-        return null;
+    @GetMapping(value = "/comments/to/post/{id}")
+    public ResponseEntity<List<Comment>> readToPost(@PathVariable(name = "id") int id) {
+        Object o = commentService.getByValue("post_id", id);
+        final List<Comment> comments = new ArrayList<>();
+        List list = (List) o;
+        if (list.size() > 0) {
+            Iterator iterator = list.iterator();
+            while (iterator.hasNext()) {
+                comments.add((Comment) iterator.next());
+            }
+        }
+        return !comments.isEmpty() ?
+                new ResponseEntity<>(comments, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

@@ -3,7 +3,7 @@ package by.bsuir.spp_project.entity.social;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users_data")
 public class User {
     //todo normal types for any tables of db and test all function
 
@@ -15,7 +15,7 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "pngName")
+    @Column(name = "png_name")
     private String pngName;
 
     public User() {

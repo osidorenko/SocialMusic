@@ -13,4 +13,6 @@ public interface PostgreSQLDAO {
     public boolean update(Object object, int id);
 
     public boolean delete(int id);
+
+    public List getByValue(String column, Integer value);
 }

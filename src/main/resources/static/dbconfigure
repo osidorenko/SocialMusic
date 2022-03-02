@@ -22,33 +22,33 @@ CREATE TABLE IF NOT EXISTS public.songs
 
 
 
-CREATE TABLE IF NOT EXISTS public.songsdata
+CREATE TABLE IF NOT EXISTS public.songs_data
 (
-    id integer NOT NULL,
-    "songId" integer NOT NULL,
-    "authorId" integer NOT NULL,
-    "songName" character varying(256) COLLATE pg_catalog."default",
-    "pngName" character varying(256) COLLATE pg_catalog."default",
-    CONSTRAINT songsdata_pkey PRIMARY KEY (id)
-)
+  id         SERIAL NOT NULL,
+  "song_id"   SERIAL NOT NULL,
+  "author_id" SERIAL NOT NULL,
+  "song_name" character varying(256) COLLATE pg_catalog."default",
+  "png_name"  character varying(256) COLLATE pg_catalog."default",
+  CONSTRAINT songsdata_pkey PRIMARY KEY (id)
+);
 CREATE TABLE IF NOT EXISTS public.posts
 (
-    id integer NOT NULL,
-    "authorId" integer NOT NULL,
-    message character varying(500) COLLATE pg_catalog."default",
-    "pngName" character varying(256) COLLATE pg_catalog."default",
-    "songName" character varying(256) COLLATE pg_catalog."default",
-    date date NOT NULL,
-    CONSTRAINT posts_pkey PRIMARY KEY (id)
-)
+  id          SERIAL NOT NULL,
+  "author_id" SERIAL NOT NULL,
+  message     character varying(500) COLLATE pg_catalog."default",
+  "png_name"  character varying(256) COLLATE pg_catalog."default",
+  "song_name" character varying(256) COLLATE pg_catalog."default",
+  date        real   NOT NULL,
+  CONSTRAINT posts_pkey PRIMARY KEY (id)
+);
 
 CREATE TABLE IF NOT EXISTS public.comments
 (
-    id integer NOT NULL,
-    "postId" integer NOT NULL,
-    "authorId" integer NOT NULL,
-    date date NOT NULL,
-    message character varying(200) COLLATE pg_catalog."default",
-    author character varying(50) COLLATE pg_catalog."default",
-    CONSTRAINT comments_pkey PRIMARY KEY (id)
-)
+  id          SERIAL NOT NULL,
+  "post_id"   SERIAL NOT NULL,
+  "author_id" SERIAL NOT NULL,
+  date        real   NOT NULL,
+  message     character varying(200) COLLATE pg_catalog."default",
+  author      character varying(50) COLLATE pg_catalog."default",
+  CONSTRAINT comments_pkey PRIMARY KEY (id)
+);

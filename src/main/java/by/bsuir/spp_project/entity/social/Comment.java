@@ -2,6 +2,7 @@ package by.bsuir.spp_project.entity.social;
 
 import javax.persistence.*;
 import java.util.Date;
+
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -9,12 +10,12 @@ public class Comment {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "postId")
+    @Column(name = "post_id")
     private Integer postId;
-    @Column(name = "authorId")
+    @Column(name = "author_id")
     private Integer authorId;
     @Column(name = "date")
-    private Date date;
+    private Long date;
     @Column(name = "message")
     private String message;
     @Column(name = "author")
@@ -24,11 +25,21 @@ public class Comment {
 
     }
 
-    public Comment(Integer id, Integer postId, Integer authorId, Date date, String message, String author) {
+
+    public Comment(Integer id, Integer postId, Integer authorId, Long date, String message, String author) {
         this.id = id;
         this.postId = postId;
         this.authorId = authorId;
         this.date = date;
+        this.message = message;
+        this.author = author;
+    }
+
+    public Comment(Integer id, Integer postId, Integer authorId, String message, String author) {
+        this.id = id;
+        this.postId = postId;
+        this.authorId = authorId;
+        this.date = new Date().getTime();
         this.message = message;
         this.author = author;
     }
@@ -49,11 +60,11 @@ public class Comment {
         this.authorId = authorId;
     }
 
-    public Date getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 

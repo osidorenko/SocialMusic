@@ -1,6 +1,7 @@
 package by.bsuir.spp_project.controller.social;
 
 
+import by.bsuir.spp_project.entity.music.SongData;
 import by.bsuir.spp_project.entity.social.Post;
 import by.bsuir.spp_project.service.rest.social.PostServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 public class PostController {
+    //todo test!!!
 
     private final PostServiceImpl postService;
 
@@ -70,10 +72,21 @@ public class PostController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    //todo posts toauthor
-    @GetMapping(value = "/posts/toauthor/{id}")
-    public ResponseEntity<Post> readToAuthor(@PathVariable(name = "id") int id) {
-        return null;
+
+    @GetMapping(value = "/posts/to/author/{id}")
+    public ResponseEntity<List<Post>> readToAuthor(@PathVariable(name = "id") int id) {
+        List o = postService.getByValue("author_id", id);
+        final List<Post> posts = new ArrayList<>();
+        List list = (List) o;
+        if (list.size() > 0) {
+            Iterator iterator = list.iterator();
+            while (iterator.hasNext()) {
+                posts.add((Post) iterator.next());
+            }
+        }
+        return !posts.isEmpty() ?
+                new ResponseEntity<>(posts, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }

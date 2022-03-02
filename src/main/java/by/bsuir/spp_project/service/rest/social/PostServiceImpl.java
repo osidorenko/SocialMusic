@@ -16,43 +16,22 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class PostServiceImpl implements RestService {
 
-    private static final Map<Integer, Post> POST_REP_MAP = new HashMap<>();
+
     private static final AtomicInteger POST_ID_HOLDER = new AtomicInteger();
 
     @Autowired
     @Qualifier("postDAO")
     private PostgreSQLDAO postDAO;
 
-    private List<Object> posts;
 
     @PostConstruct
     private void init() {
-        posts = postDAO.readAll();
-        if (posts != null && !posts.isEmpty()) {
-            Iterator iterator = posts.iterator();
-            while (iterator.hasNext()) {
-                Post post = (Post) iterator.next();
-                POST_REP_MAP.put(post.getId(), post);
-            }
-            POST_ID_HOLDER.set(posts.size());
-        }
+
     }
 
     @PreDestroy
     public void destroy() {
-        int i = 0;
-        if (posts != null) {
-            i = posts.size();
-        }
-        ArrayList<Post> rep = new ArrayList<>(POST_REP_MAP.values());
-        while (i < POST_ID_HOLDER.get()) {
-            if (POST_REP_MAP.containsKey(i + 1)) {
-                Post post = (Post) rep.get(i);
-                post.setId(i + 1);
-                postDAO.create(post);
-            }
-            i++;
-        }
+
     }
 
     @Override
@@ -60,32 +39,31 @@ public class PostServiceImpl implements RestService {
         Post post = (Post) object;
         final int userId = POST_ID_HOLDER.incrementAndGet();
         post.setId(userId);
-        POST_REP_MAP.put(userId, post);
+        postDAO.create(object);
     }
 
     @Override
     public List<Object> readAll() {
-        return new ArrayList<>(POST_REP_MAP.values());
+        return postDAO.readAll();
     }
 
     @Override
     public Object readById(int id) {
-        return POST_REP_MAP.get(id);
+        return postDAO.readById(id);
     }
 
     @Override
     public boolean update(Object object, int id) {
-        if (POST_REP_MAP.containsKey(id)) {
-            Post post = (Post) object;
-            post.setId(id);
-            POST_REP_MAP.put(id, post);
-            return true;
-        }
-        return false;
+        return postDAO.update(object, id);
     }
 
     @Override
     public boolean delete(int id) {
-        return POST_REP_MAP.remove(id) != null;
+        return postDAO.delete(id);
+    }
+
+    @Override
+    public List<Post> getByValue(String column, Integer value) {
+        return postDAO.getByValue(column, value);
     }
 }

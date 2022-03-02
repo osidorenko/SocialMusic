@@ -7,33 +7,37 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 @Component("userDAO")
 public class UserPostgreSQLDAO implements PostgreSQLDAO {
     @Autowired
-    private UserRepository repository;
+    private UserRepository userRepository;
 
     @Override
     public void create(Object object) {
-        repository.save((User) object);
+        userRepository.save((User) object);
     }
 
     @Override
-    public List readAll() {
-        return repository.findAll();
+    public List<User> readAll() {
+        return userRepository.findAll();
     }
 
     @Override
     public Object readById(int id) {
-        return repository.getOne(id);
+        if (userRepository.existsById(id)) {
+            return userRepository.getById(id);
+        }
+        return null;
     }
 
     @Override
     public boolean update(Object object, int id) {
-        if (repository.existsById(id)) {
+        if (userRepository.existsById(id)) {
             User user = (User) object;
             user.setId(id);
-            repository.save(user);
+            userRepository.saveAndFlush(user);
             return true;
         }
         return false;
@@ -41,7 +45,15 @@ public class UserPostgreSQLDAO implements PostgreSQLDAO {
 
     @Override
     public boolean delete(int id) {
-        repository.deleteById(id);
-        return true;
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<User> getByValue(String column, Integer value) {
+        return null;
     }
 }

@@ -6,6 +6,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "songs")
 public class Song {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +42,16 @@ public class Song {
     public void setRaiting(Double raiting) {
         this.raiting = raiting;
     }
+
+    public Song(Integer id, String name, String author, Double lasting, Double raiting, String gengre) {
+        this.id = id;
+        this.name = name;
+        this.author = author;
+        this.lasting = lasting;
+        this.raiting = raiting;
+        this.gengre = gengre;
+    }
+
 
     public Song(Integer id, String name, String author, Double lasting, Double raiting) {
         this.id = id;

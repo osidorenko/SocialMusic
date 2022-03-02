@@ -5,6 +5,7 @@ import by.bsuir.spp_project.entity.music.SongData;
 import org.springframework.data.annotation.TypeAlias;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -16,26 +17,25 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "authorId")
+    @Column(name = "author_id")
     private Integer authorId;
 
     @Column(name = "message")
     private String message;
 
-    @Column(name = "pngName")
+    @Column(name = "png_name")
     private String pngName;
 
-    @Column(name = "songName")
+    @Column(name = "song_name")
     private String songName;
 
     @Column(name = "date")
-    private Date date;
+    private Long date;
 
     public Post() {
     }
 
-
-    public Post(Integer id, Integer authorId, String message, String pngName, String songName, Date date) {
+    public Post(Integer id, Integer authorId, String message, String pngName, String songName, Long date) {
         this.id = id;
         this.authorId = authorId;
         this.message = message;
@@ -44,13 +44,31 @@ public class Post {
         this.date = date;
     }
 
+    public Post(Integer id, Integer authorId, String message, String pngName, String songName, Date date) {
+        this.id = id;
+        this.authorId = authorId;
+        this.message = message;
+        this.pngName = pngName;
+        this.songName = songName;
+        //this.date = date;
+    }
+
+    public Post(Integer id, Integer authorId, String message, String pngName, String songName) {
+        this.id = id;
+        this.authorId = authorId;
+        this.message = message;
+        this.pngName = pngName;
+        this.songName = songName;
+        this.date = new Date().getTime();
+    }
+
     public Post(Integer id, Integer authorId, String message, String pngName, Song song, Date date) {
         this.id = id;
         this.authorId = authorId;
         this.message = message;
         this.pngName = pngName;
 
-        this.date = date;
+        //this.date = date;
     }
 
     public Integer getId() {
@@ -94,11 +112,23 @@ public class Post {
         this.songName = songName;
     }
 
-    public Date getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Long date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"id\":" + id +
+                ", \"authorId\":" + authorId +
+                ", \"message\":\"" + message + '\"' +
+                ", \"pngName\":\"" + pngName + '\"' +
+                ", \"songName\":\"" + songName + '\"' +
+                ", date=" + date +
+                '}';
     }
 }

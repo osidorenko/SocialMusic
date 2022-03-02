@@ -6,35 +6,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Component("postDAO")
 public class PostPostgreSQLDAO implements PostgreSQLDAO {
     @Autowired
-    private PostRepository repository;
+    private PostRepository postRepository;
 
     @Override
     public void create(Object object) {
-        repository.save((Post) object);
+        postRepository.save((Post) object);
     }
 
     @Override
-    public List readAll() {
-        return repository.findAll();
+    public List<Post> readAll() {
+        return postRepository.findAll();
     }
 
     @Override
     public Object readById(int id) {
-        return repository.getOne(id);
+        if (postRepository.existsById(id)) {
+            return postRepository.findById(id).get();
+        }
+        return null;
     }
 
     @Override
     public boolean update(Object object, int id) {
-        if (repository.existsById(id)) {
+        if (postRepository.existsById(id)) {
             Post post = (Post) object;
             post.setId(id);
-            repository.save(post);
+            postRepository.saveAndFlush(post);
             return true;
         }
         return false;
@@ -42,7 +46,19 @@ public class PostPostgreSQLDAO implements PostgreSQLDAO {
 
     @Override
     public boolean delete(int id) {
-        repository.deleteById(id);
-        return true;
+        if (postRepository.existsById(id)) {
+            postRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List getByValue(String column, Integer value) {
+        List list = new ArrayList();
+        if (column.equals("author_id")) {
+            list = postRepository.getByAuthorId(value);
+        }
+        return list;
     }
 }
