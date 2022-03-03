@@ -1,6 +1,9 @@
-package by.bsuir.spp_project.controller;
+package by.bsuir.spp_project.controller.shutdown;
+
+import org.springframework.context.annotation.Bean;
 
 import javax.annotation.PreDestroy;
+
 
 public class TerminateBean {
     @PreDestroy

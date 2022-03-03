@@ -9,11 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 public interface SongDataRepository extends JpaRepository<SongData, Integer> {
-    /*
-    * @Query("SELECT u FROM User u WHERE u.status = :status and u.name = :name")
-User findUserByStatusAndNameNamedParams(
-  @Param("status") Integer status,
-  @Param("name") String name);*/
+
     @Query(value = "SELECT s FROM SongData s where s.songId= :val ")
     public List<SongData> getBySongId(@Param("val") Integer val);
 

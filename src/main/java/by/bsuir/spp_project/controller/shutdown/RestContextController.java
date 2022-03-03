@@ -1,4 +1,4 @@
-package by.bsuir.spp_project.controller;
+package by.bsuir.spp_project.controller.shutdown;
 
 import by.bsuir.spp_project.SppProjectApplication;
 import by.bsuir.spp_project.entity.music.SongData;

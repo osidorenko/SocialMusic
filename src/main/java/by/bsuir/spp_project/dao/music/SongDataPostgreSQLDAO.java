@@ -20,7 +20,7 @@ public class SongDataPostgreSQLDAO implements PostgreSQLDAO {
     public void create(Object object) {
         SongData songData = (SongData) object;
         List list = songDataRepository.getBySongId(songData.getSongId());
-        if (list.isEmpty()){
+        if (list.isEmpty()) {
             songDataRepository.save((SongData) object);
         }
     }
@@ -51,7 +51,7 @@ public class SongDataPostgreSQLDAO implements PostgreSQLDAO {
 
     @Override
     public List<SongData> getByValue(String column, Integer value) {
-        List o = new ArrayList();
+        List<SongData> o = new ArrayList();
         if (column.equals("song_id")) {
             o = songDataRepository.getBySongId(value);
         } else {
