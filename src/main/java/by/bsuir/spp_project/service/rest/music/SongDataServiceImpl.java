@@ -26,6 +26,7 @@ public class SongDataServiceImpl implements RestService {
 
     @PostConstruct
     private void init() {
+        SONG_DATA_ID_HOLDER.set(songdataDAO.count());
 
     }
 

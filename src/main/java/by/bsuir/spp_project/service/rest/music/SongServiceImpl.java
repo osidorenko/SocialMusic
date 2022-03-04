@@ -25,7 +25,7 @@ public class SongServiceImpl implements RestService {
 
     @PostConstruct
     private void init() {
-
+        SONG_ID_HOLDER.set(songDAO.count());
     }
 
     @PreDestroy
@@ -61,6 +61,7 @@ public class SongServiceImpl implements RestService {
     public boolean delete(int id) {
         return songDAO.delete(id);
     }
+
     @Override
     public List<Song> getByValue(String column, Integer value) {
         return null;

@@ -52,3 +52,14 @@ CREATE TABLE IF NOT EXISTS public.comments
   author      character varying(50) COLLATE pg_catalog."default",
   CONSTRAINT comments_pkey PRIMARY KEY (id)
 );
+
+CREATE TABLE IF NOT EXISTS public.clients_data
+(
+    id        SERIAL NOT NULL,
+    user_id   SERIAL NOT NULL,
+    login     character varying(50) COLLATE pg_catalog."default",
+    h_pass    char(50) COLLATE pg_catalog."default",
+    is_online bool,
+    CONSTRAINT clients_data_pkey PRIMARY KEY (id)
+);
+

@@ -4,7 +4,9 @@ import java.util.List;
 
 public interface PostgreSQLDAO {
 
-    public void create(Object object);
+    public int count();
+
+    public boolean create(Object object);
 
     public List readAll();
 

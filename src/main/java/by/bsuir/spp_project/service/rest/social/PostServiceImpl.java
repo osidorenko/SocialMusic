@@ -26,7 +26,7 @@ public class PostServiceImpl implements RestService {
 
     @PostConstruct
     private void init() {
-
+        POST_ID_HOLDER.set( postDAO.count());
     }
 
     @PreDestroy

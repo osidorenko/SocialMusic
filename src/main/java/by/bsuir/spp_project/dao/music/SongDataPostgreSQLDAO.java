@@ -17,12 +17,19 @@ public class SongDataPostgreSQLDAO implements PostgreSQLDAO {
     private SongDataRepository songDataRepository;
 
     @Override
-    public void create(Object object) {
+    public boolean create(Object object) {
         SongData songData = (SongData) object;
-        List list = songDataRepository.getBySongId(songData.getSongId());
+        List<SongData> list = songDataRepository.getBySongId(songData.getSongId());
         if (list.isEmpty()) {
             songDataRepository.save((SongData) object);
+            return true;
         }
+        return false;
+    }
+
+    @Override
+    public int count() {
+        return (int) songDataRepository.count();
     }
 
     @Override

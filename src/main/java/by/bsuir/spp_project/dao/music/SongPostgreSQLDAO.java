@@ -16,9 +16,10 @@ public class SongPostgreSQLDAO implements PostgreSQLDAO {
     private SongRepository songRepository;
 
     @Override
-    public void create(Object object) {
+    public boolean create(Object object) {
         Song song = (Song) object;
         songRepository.save(song);
+        return true;
     }
 
     @Override
@@ -44,7 +45,10 @@ public class SongPostgreSQLDAO implements PostgreSQLDAO {
         }
         return false;
     }
-
+    @Override
+    public int count(){
+        return (int)songRepository.count();
+    }
     @Override
     public boolean delete(int id) {
         if (songRepository.existsById(id)) {

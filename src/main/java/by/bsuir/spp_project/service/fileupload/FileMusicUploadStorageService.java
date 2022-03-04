@@ -1,6 +1,5 @@
 package by.bsuir.spp_project.service.fileupload;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -15,10 +14,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-@Service
-public class FileSystemStorageService implements StorageService {
+@Service(value = "fileMusicUploadStrorageService")
+public class FileMusicUploadStorageService implements StorageService {
 
-    private final Path root = Paths.get("uploads");
+    private final Path root = Paths.get("uploads/music");
 
     @Override
     @PostConstruct
@@ -30,17 +29,24 @@ public class FileSystemStorageService implements StorageService {
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
+
     }
 
     @Override
     public boolean save(MultipartFile file) {
         try {
-            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
-            return true;
+            String s = file.getOriginalFilename();
+            int size = s.length();
+            if (s.substring(size - 3, size).equals("mp3")) {
+                Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+                return true;
+            } else {
+                return false;
+            }
+
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
-
     }
 
     @Override
@@ -72,5 +78,3 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 }
-
-

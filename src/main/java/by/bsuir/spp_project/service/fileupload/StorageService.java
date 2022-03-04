@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public interface StorageService {
     public void init();
 
-    public void save(MultipartFile file);
+    public boolean save(MultipartFile file);
 
     public Resource load(String filename);
 

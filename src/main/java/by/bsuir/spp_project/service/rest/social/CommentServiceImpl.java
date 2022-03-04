@@ -14,10 +14,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-public class
-
-CommentServiceImpl implements RestService {
-
+public class CommentServiceImpl implements RestService {
 
     private static final AtomicInteger COMMENT_ID_HOLDER = new AtomicInteger();
 
@@ -28,7 +25,7 @@ CommentServiceImpl implements RestService {
 
     @PostConstruct
     private void init() {
-
+        COMMENT_ID_HOLDER.set(commentDAO.count());
     }
 
     @PreDestroy

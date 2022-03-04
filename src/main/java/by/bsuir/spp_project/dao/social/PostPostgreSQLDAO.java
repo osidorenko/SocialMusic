@@ -16,8 +16,9 @@ public class PostPostgreSQLDAO implements PostgreSQLDAO {
     private PostRepository postRepository;
 
     @Override
-    public void create(Object object) {
+    public boolean create(Object object) {
         postRepository.save((Post) object);
+        return true;
     }
 
     @Override
@@ -32,7 +33,10 @@ public class PostPostgreSQLDAO implements PostgreSQLDAO {
         }
         return null;
     }
-
+    @Override
+    public int count(){
+        return (int)postRepository.count();
+    }
     @Override
     public boolean update(Object object, int id) {
         if (postRepository.existsById(id)) {

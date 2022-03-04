@@ -16,10 +16,14 @@ public class CommentPostgreSQLDAO implements PostgreSQLDAO {
     private CommentRepository commentRepository;
 
     @Override
-    public void create(Object object) {
+    public boolean create(Object object) {
         commentRepository.save((Comment) object);
+        return true;
     }
-
+    @Override
+    public int count(){
+        return (int)commentRepository.count();
+    }
     @Override
     public List<Comment> readAll() {
         return commentRepository.findAll();

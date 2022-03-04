@@ -15,8 +15,13 @@ public class UserPostgreSQLDAO implements PostgreSQLDAO {
     private UserRepository userRepository;
 
     @Override
-    public void create(Object object) {
+    public boolean create(Object object) {
         userRepository.save((User) object);
+        return true;
+    }
+    @Override
+    public int count(){
+        return (int)userRepository.count();
     }
 
     @Override

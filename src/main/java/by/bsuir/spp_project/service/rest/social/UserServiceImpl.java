@@ -25,7 +25,7 @@ public class UserServiceImpl implements RestService {
 
     @PostConstruct
     private void init() {
-
+        USER_ID_HOLDER.set(userDAO.count());
     }
 
     @PreDestroy
