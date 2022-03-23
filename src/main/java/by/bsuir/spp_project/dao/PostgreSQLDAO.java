@@ -1,18 +1,20 @@
 package by.bsuir.spp_project.dao;
 
+import by.bsuir.spp_project.entity.social.Comment;
+
 import java.util.List;
 
-public interface PostgreSQLDAO {
+public interface PostgreSQLDAO<E> {
 
     public int count();
 
-    public boolean create(Object object);
+    public boolean create(E object);
 
-    public List readAll();
+    public List<E> readAll();
 
-    public Object readById(int id);
+    public E readById(int id);
 
-    public boolean update(Object object, int id);
+    public boolean update(E object, int id);
 
     public boolean delete(int id);
 

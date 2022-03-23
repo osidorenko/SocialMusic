@@ -13,7 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -32,6 +38,7 @@ public class FilePhotoUploadController {
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
         try {
+            Set set = new HashSet<String>();
             storageService.save(file);
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
@@ -56,7 +63,9 @@ public class FilePhotoUploadController {
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
         Resource file = storageService.load(filename);
-        return ResponseEntity.ok()
+        return (ResponseEntity<Resource>) ResponseEntity.ok()
+                //todo httpheader make and read about headers
+                .header("Content-type", "Image/png")
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 

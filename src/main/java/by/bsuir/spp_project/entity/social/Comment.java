@@ -10,10 +10,15 @@ public class Comment {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "post_id")
-    private Integer postId;
-    @Column(name = "author_id")
-    private Integer authorId;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    @OneToOne
+    @JoinColumn(name = "author_id")
+    private User user;
+
     @Column(name = "date")
     private Long date;
     @Column(name = "message")
@@ -26,38 +31,29 @@ public class Comment {
     }
 
 
-    public Comment(Integer id, Integer postId, Integer authorId, Long date, String message, String author) {
+    public Comment(Integer id, Post post, User user, Long date, String message, String author) {
         this.id = id;
-        this.postId = postId;
-        this.authorId = authorId;
-        this.date = date;
-        this.message = message;
-        this.author = author;
-    }
-
-    public Comment(Integer id, Integer postId, Integer authorId, String message, String author) {
-        this.id = id;
-        this.postId = postId;
-        this.authorId = authorId;
+        this.post = post;
+        this.user = user;
         this.date = new Date().getTime();
         this.message = message;
         this.author = author;
     }
 
-    public Integer getPostId() {
-        return postId;
+    public Post getPost() {
+        return post;
     }
 
-    public void setPostId(Integer postId) {
-        this.postId = postId;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
-    public Integer getAuthorId() {
-        return authorId;
+    public User getUser() {
+        return user;
     }
 
-    public void setAuthorId(Integer authorId) {
-        this.authorId = authorId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getDate() {

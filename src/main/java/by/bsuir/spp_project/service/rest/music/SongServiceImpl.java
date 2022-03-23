@@ -14,13 +14,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 
-public class SongServiceImpl implements RestService {
+public class SongServiceImpl implements RestService<Song> {
 
     private static final AtomicInteger SONG_ID_HOLDER = new AtomicInteger();
 
     @Autowired
     @Qualifier("songDAO")
-    private PostgreSQLDAO songDAO;
+    private PostgreSQLDAO<Song> songDAO;
 
 
     @PostConstruct
@@ -35,7 +35,7 @@ public class SongServiceImpl implements RestService {
 
 
     @Override
-    public void create(Object object) {
+    public void create(Song object) {
         Song song = (Song) object;
         final int songId = SONG_ID_HOLDER.incrementAndGet();
         song.setId(songId);
@@ -43,17 +43,17 @@ public class SongServiceImpl implements RestService {
     }
 
     @Override
-    public List<Object> readAll() {
+    public List<Song> readAll() {
         return songDAO.readAll();
     }
 
     @Override
-    public Object readById(int id) {
+    public Song readById(int id) {
         return songDAO.readById(id);
     }
 
     @Override
-    public boolean update(Object object, int id) {
+    public boolean update(Song object, int id) {
         return songDAO.update(object, id);
     }
 

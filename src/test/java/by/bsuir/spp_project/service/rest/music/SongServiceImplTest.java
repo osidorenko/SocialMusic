@@ -38,10 +38,10 @@ class SongServiceImplTest {
     @Test
     void taoString() {
 
-        Post post = new Post(1,1,"hello world","/path/png.png","path/song.mp3");
-        System.out.println(post.toString());
-        SongData songa = new SongData(1,1,3,"path/song1.mp3","path/pngsong1.png");
-        System.out.println(songa.toString());
+
+
+        //SongData songa = new SongData(1,1,3,"path/song1.mp3","path/pngsong1.png");
+        //System.out.println(songa.toString());
         /*SongData songa = new SongData(1,1,3,"path/song1.mp3","path/pngsong1.png");
         System.out.println(songa.toString());
         Song song = new Song(0, "Fire", "OlegSidor", 3.45, 2.5);

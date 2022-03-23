@@ -2,17 +2,18 @@ package by.bsuir.spp_project.service.rest;
 
 import java.util.List;
 
-public interface RestService {
+public interface RestService<E> {
 
-    public void create(Object object);
+    public void create(E object);
 
-    public List readAll();
+    public List<E> readAll();
 
-    public Object readById(int id);
+    public E readById(int id);
 
-    public boolean update(Object object, int id);
+    public boolean update(E object, int id);
 
     public boolean delete(int id);
 
-    public List getByValue(String column, Integer value);
+    public List<E> getByValue(String column, Integer value);
+
 }

@@ -11,34 +11,37 @@ import java.util.List;
 
 @Service
 @Component("commentDAO")
-public class CommentPostgreSQLDAO implements PostgreSQLDAO {
+public class CommentPostgreSQLDAO implements PostgreSQLDAO<Comment> {
     @Autowired
     private CommentRepository commentRepository;
 
     @Override
-    public boolean create(Object object) {
+    public boolean create(Comment object) {
         commentRepository.save((Comment) object);
         return true;
     }
+
     @Override
-    public int count(){
-        return (int)commentRepository.count();
+    public int count() {
+        return (int) commentRepository.count();
     }
+
     @Override
     public List<Comment> readAll() {
         return commentRepository.findAll();
     }
 
     @Override
-    public Object readById(int id) {
+    public Comment readById(int id) {
         if (commentRepository.existsById(id)) {
             return commentRepository.findById(id).get();
         }
         return null;
     }
 
+
     @Override
-    public boolean update(Object object, int id) {
+    public boolean update(Comment object, int id) {
         if (commentRepository.existsById(id)) {
             Comment com = (Comment) object;
             com.setId(id);

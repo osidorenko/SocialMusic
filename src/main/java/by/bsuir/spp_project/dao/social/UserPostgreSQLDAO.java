@@ -10,18 +10,19 @@ import java.util.List;
 
 @Service
 @Component("userDAO")
-public class UserPostgreSQLDAO implements PostgreSQLDAO {
+public class UserPostgreSQLDAO implements PostgreSQLDAO<User> {
     @Autowired
     private UserRepository userRepository;
 
     @Override
-    public boolean create(Object object) {
+    public boolean create(User object) {
         userRepository.save((User) object);
         return true;
     }
+
     @Override
-    public int count(){
-        return (int)userRepository.count();
+    public int count() {
+        return (int) userRepository.count();
     }
 
     @Override
@@ -30,7 +31,7 @@ public class UserPostgreSQLDAO implements PostgreSQLDAO {
     }
 
     @Override
-    public Object readById(int id) {
+    public User readById(int id) {
         if (userRepository.existsById(id)) {
             return userRepository.getById(id);
         }
@@ -38,7 +39,7 @@ public class UserPostgreSQLDAO implements PostgreSQLDAO {
     }
 
     @Override
-    public boolean update(Object object, int id) {
+    public boolean update(User object, int id) {
         if (userRepository.existsById(id)) {
             User user = (User) object;
             user.setId(id);

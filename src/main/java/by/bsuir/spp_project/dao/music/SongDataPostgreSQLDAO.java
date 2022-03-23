@@ -11,15 +11,15 @@ import java.util.List;
 
 @Component("songDataDAO")
 @Service
-public class SongDataPostgreSQLDAO implements PostgreSQLDAO {
+public class SongDataPostgreSQLDAO implements PostgreSQLDAO<SongData> {
 
     @Autowired
     private SongDataRepository songDataRepository;
 
     @Override
-    public boolean create(Object object) {
+    public boolean create(SongData object) {
         SongData songData = (SongData) object;
-        List<SongData> list = songDataRepository.getBySongId(songData.getSongId());
+        List<SongData> list = songDataRepository.getBySongId(songData.getId());
         if (list.isEmpty()) {
             songDataRepository.save((SongData) object);
             return true;
@@ -38,7 +38,7 @@ public class SongDataPostgreSQLDAO implements PostgreSQLDAO {
     }
 
     @Override
-    public Object readById(int id) {
+    public SongData readById(int id) {
         if (songDataRepository.existsById(id)) {
             return songDataRepository.findById(id).get();
         }
@@ -46,7 +46,7 @@ public class SongDataPostgreSQLDAO implements PostgreSQLDAO {
     }
 
     @Override
-    public boolean update(Object object, int id) {
+    public boolean update(SongData object, int id) {
         if (songDataRepository.existsById(id)) {
             SongData songdata = (SongData) object;
             songdata.setId(id);

@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
-    @Query(value = "SELECT s FROM Post s where  s.authorId = :val ")
+    @Query(value = "SELECT s FROM Post s where  s.user.id = :val ")
     public List<Post> getByAuthorId(@Param("val") Integer val);
 }

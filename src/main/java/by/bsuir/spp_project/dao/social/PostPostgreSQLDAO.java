@@ -11,12 +11,12 @@ import java.util.List;
 
 @Service
 @Component("postDAO")
-public class PostPostgreSQLDAO implements PostgreSQLDAO {
+public class PostPostgreSQLDAO implements PostgreSQLDAO<Post> {
     @Autowired
     private PostRepository postRepository;
 
     @Override
-    public boolean create(Object object) {
+    public boolean create(Post object) {
         postRepository.save((Post) object);
         return true;
     }
@@ -27,7 +27,7 @@ public class PostPostgreSQLDAO implements PostgreSQLDAO {
     }
 
     @Override
-    public Object readById(int id) {
+    public Post readById(int id) {
         if (postRepository.existsById(id)) {
             return postRepository.findById(id).get();
         }
@@ -38,7 +38,7 @@ public class PostPostgreSQLDAO implements PostgreSQLDAO {
         return (int)postRepository.count();
     }
     @Override
-    public boolean update(Object object, int id) {
+    public boolean update(Post object, int id) {
         if (postRepository.existsById(id)) {
             Post post = (Post) object;
             post.setId(id);

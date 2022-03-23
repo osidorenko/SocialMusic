@@ -10,13 +10,13 @@ import java.util.List;
 
 @Component("songDAO")
 @Service
-public class SongPostgreSQLDAO implements PostgreSQLDAO {
+public class SongPostgreSQLDAO implements PostgreSQLDAO<Song> {
 
     @Autowired
     private SongRepository songRepository;
 
     @Override
-    public boolean create(Object object) {
+    public boolean create(Song object) {
         Song song = (Song) object;
         songRepository.save(song);
         return true;
@@ -28,7 +28,7 @@ public class SongPostgreSQLDAO implements PostgreSQLDAO {
     }
 
     @Override
-    public Object readById(int id) {
+    public Song readById(int id) {
         if (songRepository.existsById(id)) {
             return (Song)songRepository.findById(id).get();
         }
@@ -36,7 +36,7 @@ public class SongPostgreSQLDAO implements PostgreSQLDAO {
     }
 
     @Override
-    public boolean update(Object object, int id) {
+    public boolean update(Song object, int id) {
         Song song = (Song) object;
         if (songRepository.existsById(id)) {
             song.setId(id);

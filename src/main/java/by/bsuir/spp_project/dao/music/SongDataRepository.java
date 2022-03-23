@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface SongDataRepository extends JpaRepository<SongData, Integer> {
 
-    @Query(value = "SELECT s FROM SongData s where s.songId= :val ")
+    @Query(value = "SELECT s FROM SongData s where s.song.id= :val ")
     public List<SongData> getBySongId(@Param("val") Integer val);
 
-    @Query(value = "SELECT s FROM SongData s where s.authorId = :val ")
+    @Query(value = "SELECT s FROM SongData s where s.user.id = :val ")
     public List<SongData> getByAuthorId(@Param("val") Integer val);
 
 }

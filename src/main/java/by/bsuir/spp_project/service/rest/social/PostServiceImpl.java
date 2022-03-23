@@ -14,14 +14,14 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-public class PostServiceImpl implements RestService {
+public class PostServiceImpl implements RestService<Post> {
 
 
     private static final AtomicInteger POST_ID_HOLDER = new AtomicInteger();
 
     @Autowired
     @Qualifier("postDAO")
-    private PostgreSQLDAO postDAO;
+    private PostgreSQLDAO<Post> postDAO;
 
 
     @PostConstruct
@@ -35,7 +35,7 @@ public class PostServiceImpl implements RestService {
     }
 
     @Override
-    public void create(Object object) {
+    public void create(Post object) {
         Post post = (Post) object;
         final int userId = POST_ID_HOLDER.incrementAndGet();
         post.setId(userId);
@@ -43,17 +43,17 @@ public class PostServiceImpl implements RestService {
     }
 
     @Override
-    public List<Object> readAll() {
+    public List<Post> readAll() {
         return postDAO.readAll();
     }
 
     @Override
-    public Object readById(int id) {
+    public Post readById(int id) {
         return postDAO.readById(id);
     }
 
     @Override
-    public boolean update(Object object, int id) {
+    public boolean update(Post object, int id) {
         return postDAO.update(object, id);
     }
 

@@ -11,9 +11,9 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
     //toauthor
     //topost
-    @Query(value = "SELECT s FROM Comment s where s.postId = :val ")
+    @Query(value = "SELECT s FROM Comment s where s.post.id = :val ")
     public List<Comment> getByPostId(@Param("val") Integer val);
 
-    @Query(value = "SELECT s FROM Comment s where s.authorId = :val ")
+    @Query(value = "SELECT s FROM Comment s where s.user.id = :val ")
     public List<Comment> getByAouthorId(@Param("val") Integer val);
 }

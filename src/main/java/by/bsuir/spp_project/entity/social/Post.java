@@ -1,33 +1,37 @@
 package by.bsuir.spp_project.entity.social;
 
-import by.bsuir.spp_project.entity.music.Song;
-import by.bsuir.spp_project.entity.music.SongData;
-import org.springframework.data.annotation.TypeAlias;
+import by.bsuir.spp_project.entity.files.Picture;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Entity
+@Entity(name = "Post")
 @Table(name = "posts")
 public class Post {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "author_id")
-    private Integer authorId;
+    @OneToOne
+    @JoinColumn(name = "author_id")
+    private User user;
 
     @Column(name = "message")
     private String message;
 
-    @Column(name = "png_name")
-    private String pngName;
+    @OneToOne
+    @JoinColumn(name = "picture_id")
+    private Picture picture;
 
     @Column(name = "song_name")
     private String songName;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<Comment>();
 
     @Column(name = "date")
     private Long date;
@@ -35,41 +39,25 @@ public class Post {
     public Post() {
     }
 
-    public Post(Integer id, Integer authorId, String message, String pngName, String songName, Long date) {
+    public Post(Integer id, User user, String message, Picture picture, String songName, List<Comment> comments, Long date) {
         this.id = id;
-        this.authorId = authorId;
+        this.user = user;
         this.message = message;
-        this.pngName = pngName;
+        this.picture = picture;
         this.songName = songName;
+        this.comments = comments;
         this.date = date;
     }
 
-    public Post(Integer id, Integer authorId, String message, String pngName, String songName, Date date) {
+    public Post(Integer id, User user, String message, Picture picture, String songName, Long date) {
         this.id = id;
-        this.authorId = authorId;
+        this.user = user;
         this.message = message;
-        this.pngName = pngName;
-        this.songName = songName;
-        //this.date = date;
-    }
-
-    public Post(Integer id, Integer authorId, String message, String pngName, String songName) {
-        this.id = id;
-        this.authorId = authorId;
-        this.message = message;
-        this.pngName = pngName;
+        this.picture = picture;
         this.songName = songName;
         this.date = new Date().getTime();
     }
 
-    public Post(Integer id, Integer authorId, String message, String pngName, Song song, Date date) {
-        this.id = id;
-        this.authorId = authorId;
-        this.message = message;
-        this.pngName = pngName;
-
-        //this.date = date;
-    }
 
     public Integer getId() {
         return id;
@@ -79,12 +67,12 @@ public class Post {
         this.id = id;
     }
 
-    public Integer getAuthorId() {
-        return authorId;
+    public User getUser() {
+        return user;
     }
 
-    public void setAuthorId(Integer authorId) {
-        this.authorId = authorId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getMessage() {
@@ -95,14 +83,13 @@ public class Post {
         this.message = message;
     }
 
-    public String getPngName() {
-        return pngName;
+    public Picture getPicture() {
+        return picture;
     }
 
-    public void setPngName(String pngName) {
-        this.pngName = pngName;
+    public void setPicture(Picture picture) {
+        this.picture = picture;
     }
-
 
     public String getSongName() {
         return songName;
@@ -122,12 +109,13 @@ public class Post {
 
     @Override
     public String toString() {
-        return "{" +
-                "\"id\":" + id +
-                ", \"authorId\":" + authorId +
-                ", \"message\":\"" + message + '\"' +
-                ", \"pngName\":\"" + pngName + '\"' +
-                ", \"songName\":\"" + songName + '\"' +
+        return "Post{" +
+                "id=" + id +
+                ", user=" + user +
+                ", message='" + message + '\'' +
+                ", picture=" + picture +
+                ", songName='" + songName + '\'' +
+                ", comments=" + comments +
                 ", date=" + date +
                 '}';
     }

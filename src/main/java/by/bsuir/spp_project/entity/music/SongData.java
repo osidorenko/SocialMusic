@@ -1,5 +1,8 @@
 package by.bsuir.spp_project.entity.music;
 
+import by.bsuir.spp_project.entity.files.Picture;
+import by.bsuir.spp_project.entity.social.User;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,30 +13,41 @@ public class SongData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "song_id")
-    private Integer songId;
+    @OneToOne
+    @JoinColumn(name = "author_id")
+    private User user;
 
-    @Column(name = "author_id")
-    private Integer authorId;
 
     @Column(name = "song_name")
     private String songName;
 
+    @OneToOne
+    @JoinColumn(name = "picture_id")
+    private Picture picture;
+
+    //todo repository for pictures!!!!! and may be songs
+    /*
     @Column(name = "png_name")
-    private String pngName;
+    private String png_name;
+*/
+    @OneToOne
+    @JoinColumn(name = "song_id")
+    private Song song;
+
+    public Song getSong() {
+        return song;
+    }
 
     public SongData() {
     }
 
-
-    public SongData(Integer id, Integer songId, Integer authorId, String songName, String pngName) {
+    public SongData(Integer id, User user, String songName, Picture picture, Song song) {
         this.id = id;
-        this.songId = songId;
-        this.authorId = authorId;
+        this.user = user;
         this.songName = songName;
-        this.pngName = pngName;
+        this.picture = picture;
+        this.song = song;
     }
-
 
     public Integer getId() {
         return id;
@@ -43,21 +57,6 @@ public class SongData {
         this.id = id;
     }
 
-    public Integer getSongId() {
-        return songId;
-    }
-
-    public void setSongId(Integer songId) {
-        this.songId = songId;
-    }
-
-    public Integer getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(Integer authorId) {
-        this.authorId = authorId;
-    }
 
     public String getSongName() {
         return songName;
@@ -67,22 +66,24 @@ public class SongData {
         this.songName = songName;
     }
 
-    public String getPngName() {
-        return pngName;
+    public User getUser() {
+        return user;
     }
 
-    public void setPngName(String pngName) {
-        this.pngName = pngName;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    @Override
-    public String toString() {
-        return "SongData{" +
-                "id:" + id +
-                ", songId:" + songId +
-                ", authorId:" + authorId +
-                ", songName:'" + songName + '\'' +
-                ", pngName:'" + pngName + '\'' +
-                '}';
+    public Picture getPicture() {
+        return picture;
     }
+
+    public void setPicture(Picture picture) {
+        this.picture = picture;
+    }
+
+    public void setSong(Song song) {
+        this.song = song;
+    }
+
 }

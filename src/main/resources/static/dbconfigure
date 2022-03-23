@@ -11,46 +11,54 @@ CREATE DATABASE socialmusic
 
 CREATE TABLE IF NOT EXISTS public.songs
 (
-  id SERIAL NOT NULL,
-  name character varying(50) COLLATE pg_catalog."default",
-  author character varying(50) COLLATE pg_catalog."default",
-  lasting numeric,
-  raiting numeric,
-  gengre character varying(30) COLLATE pg_catalog."default",
-  CONSTRAINT songs_pkey PRIMARY KEY (id)
+    id      SERIAL NOT NULL,
+    name    character varying(50) COLLATE pg_catalog."default",
+    author  character varying(50) COLLATE pg_catalog."default",
+    lasting numeric,
+    raiting numeric,
+    gengre  character varying(30) COLLATE pg_catalog."default",
+    CONSTRAINT songs_pkey PRIMARY KEY (id)
 );
-
 
 
 CREATE TABLE IF NOT EXISTS public.songs_data
 (
-  id         SERIAL NOT NULL,
-  "song_id"   SERIAL NOT NULL,
-  "author_id" SERIAL NOT NULL,
-  "song_name" character varying(256) COLLATE pg_catalog."default",
-  "png_name"  character varying(256) COLLATE pg_catalog."default",
-  CONSTRAINT songsdata_pkey PRIMARY KEY (id)
+    id           SERIAL NOT NULL,
+    "song_id"    SERIAL NOT NULL,
+    "author_id"  SERIAL NOT NULL,
+    "song_name"  character varying(256) COLLATE pg_catalog."default",
+    "picture_id" SERIAL NOT NULL,
+    CONSTRAINT songsdata_pkey PRIMARY KEY (id)
 );
+
 CREATE TABLE IF NOT EXISTS public.posts
 (
-  id          SERIAL NOT NULL,
-  "author_id" SERIAL NOT NULL,
-  message     character varying(500) COLLATE pg_catalog."default",
-  "png_name"  character varying(256) COLLATE pg_catalog."default",
-  "song_name" character varying(256) COLLATE pg_catalog."default",
-  date        real   NOT NULL,
-  CONSTRAINT posts_pkey PRIMARY KEY (id)
+    id           SERIAL NOT NULL,
+    "author_id"  SERIAL NOT NULL,
+    message      character varying(500) COLLATE pg_catalog."default",
+    "picture_id" SERIAL NOT NULL,
+    "song_name"  character varying(256) COLLATE pg_catalog."default",
+    date         real   NOT NULL,
+    CONSTRAINT posts_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS public.comments
 (
-  id          SERIAL NOT NULL,
-  "post_id"   SERIAL NOT NULL,
-  "author_id" SERIAL NOT NULL,
-  date        real   NOT NULL,
-  message     character varying(200) COLLATE pg_catalog."default",
-  author      character varying(50) COLLATE pg_catalog."default",
-  CONSTRAINT comments_pkey PRIMARY KEY (id)
+    id          SERIAL NOT NULL,
+    "post_id"   SERIAL NOT NULL,
+    "author_id" SERIAL NOT NULL,
+    date        real   NOT NULL,
+    message     character varying(200) COLLATE pg_catalog."default",
+    author      character varying(50) COLLATE pg_catalog."default",
+    CONSTRAINT comments_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS public.users_data
+(
+    id           SERIAL NOT NULL,
+    name         character varying(50) COLLATE pg_catalog."default",
+    "picture_id" SERIAL NOT NULL,
+    CONSTRAINT users_data_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS public.clients_data
@@ -62,4 +70,6 @@ CREATE TABLE IF NOT EXISTS public.clients_data
     is_online bool,
     CONSTRAINT clients_data_pkey PRIMARY KEY (id)
 );
+
+
 

@@ -14,13 +14,13 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-public class CommentServiceImpl implements RestService {
+public class CommentServiceImpl implements RestService<Comment> {
 
     private static final AtomicInteger COMMENT_ID_HOLDER = new AtomicInteger();
 
     @Autowired
     @Qualifier("commentDAO")
-    private PostgreSQLDAO commentDAO;
+    private PostgreSQLDAO<Comment> commentDAO;
 
 
     @PostConstruct
@@ -34,7 +34,7 @@ public class CommentServiceImpl implements RestService {
     }
 
     @Override
-    public void create(Object object) {
+    public void create(Comment object) {
         Comment com = (Comment) object;
         final int userId = COMMENT_ID_HOLDER.incrementAndGet();
         com.setId(userId);
@@ -42,17 +42,17 @@ public class CommentServiceImpl implements RestService {
     }
 
     @Override
-    public List<Object> readAll() {
+    public List<Comment> readAll() {
         return commentDAO.readAll();
     }
 
     @Override
-    public Object readById(int id) {
+    public Comment readById(int id) {
         return readById(id);
     }
 
     @Override
-    public boolean update(Object object, int id) {
+    public boolean update(Comment object, int id) {
         return commentDAO.update(object, id);
     }
 

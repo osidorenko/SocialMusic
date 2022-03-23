@@ -1,5 +1,7 @@
 package by.bsuir.spp_project.entity.social;
 
+import by.bsuir.spp_project.entity.files.Picture;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,17 +17,25 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "png_name")
-    private String pngName;
+    @OneToOne
+    @JoinColumn(name = "picture_id")
+    private Picture picture;
+
 
     public User() {
 
     }
 
+    public User(Integer id, String name, Picture picture) {
+        this.id = id;
+        this.name = name;
+        this.picture = picture;
+    }
+
     public User(Integer id, String name, String pngName) {
         this.id = id;
         this.name = name;
-        this.pngName = pngName;
+
     }
 
     public Integer getId() {
@@ -44,11 +54,11 @@ public class User {
         this.name = name;
     }
 
-    public String getPngName() {
-        return pngName;
+    public Picture getPicture() {
+        return picture;
     }
 
-    public void setPngName(String pngName) {
-        this.pngName = pngName;
+    public void setPicture(Picture picture) {
+        this.picture = picture;
     }
 }
