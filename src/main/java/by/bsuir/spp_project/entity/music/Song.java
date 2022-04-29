@@ -28,6 +28,7 @@ public class Song {
     private String gengre;
 
     public Song(Integer id, String name, String author, Double lasting) {
+
         this.id = id;
         this.name = name;
         this.author = author;
@@ -35,13 +36,7 @@ public class Song {
         this.gengre = Gengre.DEFAULT.toString();
     }
 
-    public Double getRaiting() {
-        return raiting;
-    }
 
-    public void setRaiting(Double raiting) {
-        this.raiting = raiting;
-    }
 
     public Song(Integer id, String name, String author, Double lasting, Double raiting, String gengre) {
         this.id = id;
@@ -64,6 +59,15 @@ public class Song {
 
     public Song() {
 
+    }
+
+
+    public Double getRaiting() {
+        return raiting;
+    }
+
+    public void setRaiting(Double raiting) {
+        this.raiting = raiting;
     }
 
     public Integer getId() {

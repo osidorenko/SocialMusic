@@ -1,9 +1,11 @@
 package by.bsuir.spp_project.service.rest.social;
 
-import by.bsuir.spp_project.dao.PostgreSQLDAO;
+import by.bsuir.spp_project.dao.PostgreSQLCRUD;
 
+import by.bsuir.spp_project.dao.PostgreSQLgetByValue;
 import by.bsuir.spp_project.entity.social.Comment;
-import by.bsuir.spp_project.service.rest.RestService;
+import by.bsuir.spp_project.service.rest.RestServiceCRUD;
+import by.bsuir.spp_project.service.rest.RestServiceGetByValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -14,14 +16,19 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-public class CommentServiceImpl implements RestService<Comment> {
+public class CommentServiceCRUDImpl implements RestServiceCRUD<Comment>, RestServiceGetByValue<Comment> {
 
     private static final AtomicInteger COMMENT_ID_HOLDER = new AtomicInteger();
 
-    @Autowired
-    @Qualifier("commentDAO")
-    private PostgreSQLDAO<Comment> commentDAO;
+    private PostgreSQLCRUD<Comment> commentDAO;
 
+    private PostgreSQLgetByValue<Comment> postgreSQLgetByValue;
+
+    @Autowired
+    public CommentServiceCRUDImpl(@Qualifier("commentDAO") PostgreSQLCRUD<Comment> commentDAO, @Qualifier("commentDAO") PostgreSQLgetByValue<Comment> postgreSQLgetByValue) {
+        this.commentDAO = commentDAO;
+        this.postgreSQLgetByValue = postgreSQLgetByValue;
+    }
 
     @PostConstruct
     private void init() {
@@ -35,10 +42,9 @@ public class CommentServiceImpl implements RestService<Comment> {
 
     @Override
     public void create(Comment object) {
-        Comment com = (Comment) object;
         final int userId = COMMENT_ID_HOLDER.incrementAndGet();
-        com.setId(userId);
-        commentDAO.create(com);
+        object.setId(userId);
+        commentDAO.create(object);
     }
 
     @Override
@@ -48,7 +54,7 @@ public class CommentServiceImpl implements RestService<Comment> {
 
     @Override
     public Comment readById(int id) {
-        return readById(id);
+        return commentDAO.readById(id);
     }
 
     @Override
@@ -63,6 +69,6 @@ public class CommentServiceImpl implements RestService<Comment> {
 
     @Override
     public List<Comment> getByValue(String column, Integer value) {
-        return commentDAO.getByValue(column, value);
+        return postgreSQLgetByValue.getByValue(column, value);
     }
 }

@@ -2,7 +2,7 @@ package by.bsuir.spp_project.service.rest;
 
 import java.util.List;
 
-public interface RestService<E> {
+public interface RestServiceCRUD<E> {
 
     public void create(E object);
 
@@ -14,6 +14,6 @@ public interface RestService<E> {
 
     public boolean delete(int id);
 
-    public List<E> getByValue(String column, Integer value);
+
 
 }

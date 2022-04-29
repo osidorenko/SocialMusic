@@ -1,5 +1,7 @@
 package by.bsuir.spp_project.controller.file;
 
+import by.bsuir.spp_project.dao.files.PictureRepository;
+import by.bsuir.spp_project.entity.files.Picture;
 import by.bsuir.spp_project.service.fileupload.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,16 +21,19 @@ import java.util.stream.Collectors;
 @Controller
 public class FileMusicUploadController {
 
+    private StorageService storageService;
 
-    StorageService storageService;
 
     @Autowired
-    public FileMusicUploadController(@Qualifier(value = "fileMusicUploadStrorageService") StorageService storageService) {
+    public FileMusicUploadController(
+            @Qualifier(value = "fileMusicUploadStrorageService") StorageService storageService) {
         this.storageService = storageService;
+
     }
 
     @PostMapping("/upload/music")
-    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<ResponseMessage> uploadFile(
+            @RequestParam("file") MultipartFile file) {
         String message = "";
         try {
             storageService.save(file);
@@ -40,12 +45,23 @@ public class FileMusicUploadController {
         }
     }
 
+    @GetMapping("/pic")
+    public ResponseEntity<List<FileInfo>> getTest() {
+        List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
+            String filename = path.getFileName().toString();
+            String url = MvcUriComponentsBuilder
+                    .fromMethodName(FileMusicUploadController.class, "getFile", path.getFileName().toString()).build().toString();
+            return new FileInfo(filename, url);
+        }).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
+    }
+
     @GetMapping("/files/music")
     public ResponseEntity<List<FileInfo>> getListFiles() {
         List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
             String filename = path.getFileName().toString();
             String url = MvcUriComponentsBuilder
-                    .fromMethodName(FilePhotoUploadController.class, "getFile", path.getFileName().toString()).build().toString();
+                    .fromMethodName(FileMusicUploadController.class, "getFile", path.getFileName().toString()).build().toString();
             return new FileInfo(filename, url);
         }).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
@@ -55,8 +71,13 @@ public class FileMusicUploadController {
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
         Resource file = storageService.load(filename);
+        if (file == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+                .header("Content-type", "audio/mpeg")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
     }
 
 }

@@ -1,8 +1,15 @@
 package by.bsuir.spp_project.entity.social;
 
-import javax.persistence.*;
-import java.util.Date;
+import lombok.Data;
 
+import javax.persistence.*;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
+@Data
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -15,37 +22,39 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "author_id")
     private User user;
 
-    @Column(name = "date")
-    private Long date;
+    @Column(name = "timestamp")
+    private Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
+
     @Column(name = "message")
     private String message;
     @Column(name = "author")
     private String author;
 
-    public Comment() {
 
+    public Comment() {
     }
 
 
-    public Comment(Integer id, Post post, User user, Long date, String message, String author) {
+    public Comment(Integer id, Post post, User user, Timestamp time, String message, String author) {
         this.id = id;
         this.post = post;
         this.user = user;
-        this.date = new Date().getTime();
+        this.timestamp = (time == null ?Timestamp.valueOf(LocalDateTime.now()) : timestamp);
         this.message = message;
         this.author = author;
     }
 
-    public Post getPost() {
-        return post;
-    }
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public Integer getPost() {
+        return post.getId();
     }
 
     public User getUser() {
@@ -56,35 +65,25 @@ public class Comment {
         this.user = user;
     }
 
-    public Long getDate() {
-        return date;
+    public String getDate() {
+        return LocalDate.ofInstant(timestamp.toInstant(), ZoneId.systemDefault()).toString();
     }
 
-    public void setDate(Long date) {
-        this.date = date;
+    public String getTime() {
+        return LocalDateTime.ofInstant(timestamp.toInstant(), ZoneId.systemDefault()).toLocalTime()
+                .format(DateTimeFormatter.ofPattern("H:mm:ss"));
     }
 
-    public String getMessage() {
-        return message;
-    }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", post=" + post +
+                ", user=" + user +
+                ", date=" + timestamp +
+                ", message='" + message + '\'' +
+                ", author='" + author + '\'' +
+                '}';
     }
 }

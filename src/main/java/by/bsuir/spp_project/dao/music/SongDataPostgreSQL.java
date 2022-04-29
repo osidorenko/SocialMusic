@@ -1,27 +1,47 @@
 package by.bsuir.spp_project.dao.music;
 
-import by.bsuir.spp_project.dao.PostgreSQLDAO;
+import by.bsuir.spp_project.dao.PostgreSQLCRUD;
+import by.bsuir.spp_project.dao.PostgreSQLgetByValue;
+import by.bsuir.spp_project.dao.files.PictureRepository;
+import by.bsuir.spp_project.entity.files.Picture;
+import by.bsuir.spp_project.entity.music.Song;
 import by.bsuir.spp_project.entity.music.SongData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component("songDataDAO")
-@Service
-public class SongDataPostgreSQLDAO implements PostgreSQLDAO<SongData> {
+@Repository("songDataDAO")
+public class SongDataPostgreSQL implements PostgreSQLCRUD<SongData>, PostgreSQLgetByValue<SongData> {
+
+
+    private SongDataRepository songDataRepository;
 
     @Autowired
-    private SongDataRepository songDataRepository;
+    private SongRepository songRepository;
+
+    @Autowired
+    private PictureRepository pictureRepository;
+
+    @Autowired
+    public SongDataPostgreSQL(SongDataRepository songDataRepository) {
+        this.songDataRepository = songDataRepository;
+    }
 
     @Override
     public boolean create(SongData object) {
-        SongData songData = (SongData) object;
-        List<SongData> list = songDataRepository.getBySongId(songData.getId());
-        if (list.isEmpty()) {
-            songDataRepository.save((SongData) object);
+        if (!songDataRepository.existsById(object.getId())) {
+            Song s = songRepository.save(object.getSong());
+            object.getPicture().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7);
+            Picture picture = pictureRepository.save(object.getPicture());
+            object.setPicture(picture);
+            object.setSong(s);
+            SongData songData = songDataRepository.save((SongData) object);
             return true;
         }
         return false;
@@ -46,6 +66,7 @@ public class SongDataPostgreSQLDAO implements PostgreSQLDAO<SongData> {
     }
 
     @Override
+    @Transactional
     public boolean update(SongData object, int id) {
         if (songDataRepository.existsById(id)) {
             SongData songdata = (SongData) object;
@@ -56,11 +77,12 @@ public class SongDataPostgreSQLDAO implements PostgreSQLDAO<SongData> {
         return false;
     }
 
+
     @Override
     public List<SongData> getByValue(String column, Integer value) {
         List<SongData> o = new ArrayList();
         if (column.equals("song_id")) {
-            o = songDataRepository.getBySongId(value);
+            o = songDataRepository.getSongDataBySong_Id(value);
         } else {
             if (column.equals("author_id")) {
                 o = songDataRepository.getByAuthorId(value);

@@ -1,5 +1,12 @@
 PostgreSQL 13
 
+
+//data time -.time strap
+serical ->bigint
+varvhar ->text
+primery key for all
+
+
 CREATE DATABASE socialmusic
     WITH
     OWNER = music_admin
@@ -31,28 +38,35 @@ CREATE TABLE IF NOT EXISTS public.songs_data
     CONSTRAINT songsdata_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS public.posts
+
+
+
+create table posts
 (
-    id           SERIAL NOT NULL,
-    "author_id"  SERIAL NOT NULL,
-    message      character varying(500) COLLATE pg_catalog."default",
-    "picture_id" SERIAL NOT NULL,
-    "song_name"  character varying(256) COLLATE pg_catalog."default",
-    date         real   NOT NULL,
-    CONSTRAINT posts_pkey PRIMARY KEY (id)
+    id         serial
+        primary key,
+    author_id  serial,
+    message    varchar(500),
+    picture_id serial,
+    song_name  varchar(256),
+    date       date not null,
+    time       time not null
 );
+
+
+
 
 CREATE TABLE IF NOT EXISTS public.comments
 (
     id          SERIAL NOT NULL,
     "post_id"   SERIAL NOT NULL,
     "author_id" SERIAL NOT NULL,
-    date        real   NOT NULL,
+    date        date   NOT NULL,
+    time        time   NOT NULL,
     message     character varying(200) COLLATE pg_catalog."default",
     author      character varying(50) COLLATE pg_catalog."default",
     CONSTRAINT comments_pkey PRIMARY KEY (id)
 );
-
 CREATE TABLE IF NOT EXISTS public.users_data
 (
     id           SERIAL NOT NULL,
@@ -72,4 +86,10 @@ CREATE TABLE IF NOT EXISTS public.clients_data
 );
 
 
+create table pictures
+(
+    id   serial
+        primary key,
+    name varchar(50)
+);
 

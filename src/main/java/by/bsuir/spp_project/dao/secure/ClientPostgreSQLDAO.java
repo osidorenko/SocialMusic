@@ -1,12 +1,8 @@
 package by.bsuir.spp_project.dao.secure;
 
-import by.bsuir.spp_project.dao.PostgreSQLDAO;
-import by.bsuir.spp_project.entity.music.Song;
 import by.bsuir.spp_project.entity.secure.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service(value = "clientPostgreSQLDAO")
 public class ClientPostgreSQLDAO {
@@ -65,7 +61,7 @@ public class ClientPostgreSQLDAO {
         return false;
     }
 
-    public char[] getHash(String login) {
+    public String getHash(String login) {
         Client client = clientRepository.readByLogin(login);
         return client.getHpass();
     }

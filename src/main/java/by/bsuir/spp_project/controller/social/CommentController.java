@@ -2,7 +2,7 @@ package by.bsuir.spp_project.controller.social;
 
 
 import by.bsuir.spp_project.entity.social.Comment;
-import by.bsuir.spp_project.service.rest.social.CommentServiceImpl;
+import by.bsuir.spp_project.service.rest.social.CommentServiceCRUDImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +15,10 @@ import java.util.List;
 @RestController
 public class CommentController {
     //todo test!!!
-    private final CommentServiceImpl commentService;
+    private final CommentServiceCRUDImpl commentService;
 
     @Autowired
-    public CommentController(CommentServiceImpl commentService) {
+    public CommentController(CommentServiceCRUDImpl commentService) {
         this.commentService = commentService;
     }
 
@@ -30,23 +30,15 @@ public class CommentController {
 
     @GetMapping(value = "/comments")
     public ResponseEntity<List<Comment>> read() {
-
-        final List<Comment> songsdata = new ArrayList<>();
-        List list = commentService.readAll();
-        if (list.size() > 0) {
-            Iterator iterator = list.iterator();
-            while (iterator.hasNext()) {
-                songsdata.add((Comment) iterator.next());
-            }
-        }
-        return !songsdata.isEmpty() ?
-                new ResponseEntity<>(songsdata, HttpStatus.OK) :
+        List<Comment> list = commentService.readAll();
+        return !list.isEmpty() ?
+                new ResponseEntity<>(list, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "/comments/{id}")
     public ResponseEntity<Comment> read(@PathVariable(name = "id") int id) {
-        final Comment com = (Comment) commentService.readById(id);
+        final Comment com = commentService.readById(id);
         return com != null ?
                 new ResponseEntity<>(com, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -85,7 +77,6 @@ public class CommentController {
                 new ResponseEntity<>(comments, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
     @GetMapping(value = "/comments/to/post/{id}")
     public ResponseEntity<List<Comment>> readToPost(@PathVariable(name = "id") int id) {
         Object o = commentService.getByValue("post_id", id);

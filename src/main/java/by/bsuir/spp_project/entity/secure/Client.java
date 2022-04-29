@@ -1,9 +1,17 @@
 package by.bsuir.spp_project.entity.secure;
 
+import by.bsuir.spp_project.entity.social.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collections;
 
+@Data
 @Entity
 @Table(name = "clients_data")
 public class Client {
@@ -12,14 +20,18 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "user_id")
-    private Integer userId;
+
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User userId;
 
     @Column(name = "login")
     private String login;
 
     @Column(name = "h_pass")
-    private char[] hpass;
+    private String hpass;
+
 
     @Column(name = "is_online")
     private boolean isOnline;
@@ -32,58 +44,14 @@ public class Client {
         this.login = login;
     }
 
-    public Client(Integer id, Integer userId, String login, char[] hpass) {
+    public Client(Integer id, User userId, String login, String hpass, boolean isOnline) {
         this.id = id;
         this.userId = userId;
         this.login = login;
         this.hpass = hpass;
+        this.isOnline = isOnline;
     }
 
-    public Client(Integer id, String login, char[] hpass) {
-        this.id = id;
-        this.login = login;
-        this.hpass = hpass;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public boolean isOnline() {
-        return isOnline;
-    }
-
-    public void setOnline(boolean online) {
-        isOnline = online;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public char[] getHpass() {
-        return hpass;
-    }
-
-    public void setHpass(char[] hpass) {
-        this.hpass = hpass;
-    }
 
     @Override
     public String toString() {
@@ -91,8 +59,15 @@ public class Client {
                 "id=" + id +
                 ", userId=" + userId +
                 ", login='" + login + '\'' +
-                ", hpass=" + Arrays.toString(hpass) +
+                ", hpass=" + hpass +
                 ", isOnline=" + isOnline +
                 '}';
     }
+
+    public UserDetails details(){
+        return new org.springframework.security.core.userdetails.User(getLogin(), getHpass(),  true, true, true, true,
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+    }
 }
+

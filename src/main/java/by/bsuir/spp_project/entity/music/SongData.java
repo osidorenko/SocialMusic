@@ -13,32 +13,26 @@ public class SongData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "author_id")
     private User user;
-
 
     @Column(name = "song_name")
     private String songName;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "picture_id")
     private Picture picture;
 
-    //todo repository for pictures!!!!! and may be songs
-    /*
-    @Column(name = "png_name")
-    private String png_name;
-*/
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "song_id")
     private Song song;
 
-    public Song getSong() {
-        return song;
+    public SongData() {
     }
 
-    public SongData() {
+    public SongData(Integer id) {
+        this.id = id;
     }
 
     public SongData(Integer id, User user, String songName, Picture picture, Song song) {
@@ -48,6 +42,11 @@ public class SongData {
         this.picture = picture;
         this.song = song;
     }
+
+    public Song getSong() {
+        return song;
+    }
+
 
     public Integer getId() {
         return id;

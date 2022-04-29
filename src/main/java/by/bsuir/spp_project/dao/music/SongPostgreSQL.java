@@ -1,6 +1,6 @@
 package by.bsuir.spp_project.dao.music;
 
-import by.bsuir.spp_project.dao.PostgreSQLDAO;
+import by.bsuir.spp_project.dao.PostgreSQLCRUD;
 import by.bsuir.spp_project.entity.music.Song;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,15 +10,19 @@ import java.util.List;
 
 @Component("songDAO")
 @Service
-public class SongPostgreSQLDAO implements PostgreSQLDAO<Song> {
+public class SongPostgreSQL implements PostgreSQLCRUD<Song> {
+
+
+    private SongRepository songRepository;
 
     @Autowired
-    private SongRepository songRepository;
+    public SongPostgreSQL(SongRepository songRepository) {
+        this.songRepository = songRepository;
+    }
 
     @Override
     public boolean create(Song object) {
-        Song song = (Song) object;
-        songRepository.save(song);
+        songRepository.save(object);
         return true;
     }
 
@@ -30,7 +34,7 @@ public class SongPostgreSQLDAO implements PostgreSQLDAO<Song> {
     @Override
     public Song readById(int id) {
         if (songRepository.existsById(id)) {
-            return (Song)songRepository.findById(id).get();
+            return (Song) songRepository.findById(id).get();
         }
         return null;
     }
@@ -45,10 +49,16 @@ public class SongPostgreSQLDAO implements PostgreSQLDAO<Song> {
         }
         return false;
     }
-    @Override
-    public int count(){
-        return (int)songRepository.count();
+
+    public int getLast() {
+        return 0;
     }
+
+    @Override
+    public int count() {
+        return (int) songRepository.count();
+    }
+
     @Override
     public boolean delete(int id) {
         if (songRepository.existsById(id)) {
@@ -56,10 +66,5 @@ public class SongPostgreSQLDAO implements PostgreSQLDAO<Song> {
             return true;
         }
         return false;
-    }
-    @Override
-    public List getByValue(String column, Integer value) {
-
-        return null;
     }
 }

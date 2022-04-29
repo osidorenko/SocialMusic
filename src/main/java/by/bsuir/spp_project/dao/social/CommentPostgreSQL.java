@@ -1,6 +1,7 @@
 package by.bsuir.spp_project.dao.social;
 
-import by.bsuir.spp_project.dao.PostgreSQLDAO;
+import by.bsuir.spp_project.dao.PostgreSQLCRUD;
+import by.bsuir.spp_project.dao.PostgreSQLgetByValue;
 import by.bsuir.spp_project.entity.social.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,15 +10,22 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 @Component("commentDAO")
-public class CommentPostgreSQLDAO implements PostgreSQLDAO<Comment> {
-    @Autowired
+public class CommentPostgreSQL implements PostgreSQLCRUD<Comment>, PostgreSQLgetByValue<Comment> {
+
+
     private CommentRepository commentRepository;
+
+    @Autowired
+    public CommentPostgreSQL(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
+    }
 
     @Override
     public boolean create(Comment object) {
-        commentRepository.save((Comment) object);
+        commentRepository.save(object);
         return true;
     }
 
@@ -43,9 +51,8 @@ public class CommentPostgreSQLDAO implements PostgreSQLDAO<Comment> {
     @Override
     public boolean update(Comment object, int id) {
         if (commentRepository.existsById(id)) {
-            Comment com = (Comment) object;
-            com.setId(id);
-            commentRepository.saveAndFlush(com);
+            object.setId(id);
+            commentRepository.saveAndFlush(object);
             return true;
         }
         return false;
@@ -61,8 +68,8 @@ public class CommentPostgreSQLDAO implements PostgreSQLDAO<Comment> {
     }
 
     @Override
-    public List getByValue(String column, Integer value) {
-        List o = new ArrayList();
+    public List<Comment> getByValue(String column, Integer value) {
+        List<Comment> o = new ArrayList<Comment>();
         if (column.equals("author_id")) {
             o = commentRepository.getByAouthorId(value);
         } else {
@@ -70,7 +77,6 @@ public class CommentPostgreSQLDAO implements PostgreSQLDAO<Comment> {
                 o = commentRepository.getByPostId(value);
             }
         }
-
         return o;
     }
 }

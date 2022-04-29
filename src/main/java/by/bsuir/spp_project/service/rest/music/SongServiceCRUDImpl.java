@@ -1,8 +1,8 @@
 package by.bsuir.spp_project.service.rest.music;
 
-import by.bsuir.spp_project.dao.PostgreSQLDAO;
+import by.bsuir.spp_project.dao.PostgreSQLCRUD;
 import by.bsuir.spp_project.entity.music.Song;
-import by.bsuir.spp_project.service.rest.RestService;
+import by.bsuir.spp_project.service.rest.RestServiceCRUD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -14,14 +14,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 
-public class SongServiceImpl implements RestService<Song> {
+public class SongServiceCRUDImpl implements RestServiceCRUD<Song> {
 
     private static final AtomicInteger SONG_ID_HOLDER = new AtomicInteger();
 
-    @Autowired
-    @Qualifier("songDAO")
-    private PostgreSQLDAO<Song> songDAO;
 
+    private PostgreSQLCRUD<Song> songDAO;
+
+    @Autowired
+    public SongServiceCRUDImpl(@Qualifier("songDAO") PostgreSQLCRUD<Song> songDAO) {
+        this.songDAO = songDAO;
+    }
 
     @PostConstruct
     private void init() {
@@ -62,8 +65,4 @@ public class SongServiceImpl implements RestService<Song> {
         return songDAO.delete(id);
     }
 
-    @Override
-    public List<Song> getByValue(String column, Integer value) {
-        return null;
-    }
 }

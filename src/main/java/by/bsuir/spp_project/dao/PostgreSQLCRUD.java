@@ -1,10 +1,8 @@
 package by.bsuir.spp_project.dao;
 
-import by.bsuir.spp_project.entity.social.Comment;
-
 import java.util.List;
 
-public interface PostgreSQLDAO<E> {
+public interface PostgreSQLCRUD<E> {
 
     public int count();
 
@@ -18,5 +16,5 @@ public interface PostgreSQLDAO<E> {
 
     public boolean delete(int id);
 
-    public List getByValue(String column, Integer value);
+
 }

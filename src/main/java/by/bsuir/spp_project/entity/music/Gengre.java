@@ -6,6 +6,4 @@ public enum Gengre {
     RAP,
     POP,
     ELECTRO
-
-
 }

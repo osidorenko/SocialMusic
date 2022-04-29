@@ -2,24 +2,21 @@ package by.bsuir.spp_project.controller.music;
 
 
 import by.bsuir.spp_project.entity.music.SongData;
-import by.bsuir.spp_project.service.rest.music.SongDataServiceImpl;
+import by.bsuir.spp_project.service.rest.music.SongDataServiceImplCRUD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 @RestController
 public class SongDataController {
 
-    private final SongDataServiceImpl songDataService;
+    private final SongDataServiceImplCRUD songDataService;
 
     @Autowired
-    public SongDataController(SongDataServiceImpl songDataService) {
+    public SongDataController(SongDataServiceImplCRUD songDataService) {
         this.songDataService = songDataService;
     }
 
@@ -31,17 +28,9 @@ public class SongDataController {
 
     @GetMapping(value = "/songs/data")
     public ResponseEntity<List<SongData>> read() {
-
-        final List<SongData> songsdata = new ArrayList<>();
-        List list = songDataService.readAll();
-        if (list.size() > 0) {
-            Iterator iterator = list.iterator();
-            while (iterator.hasNext()) {
-                songsdata.add((SongData) iterator.next());
-            }
-        }
-        return !songsdata.isEmpty() ?
-                new ResponseEntity<>(songsdata, HttpStatus.OK) :
+        List<SongData> list = songDataService.readAll();
+        return !list.isEmpty() ?
+                new ResponseEntity<>(list, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -56,7 +45,6 @@ public class SongDataController {
     @PutMapping(value = "/songs/data/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody SongData songData) {
         final boolean updated = songDataService.update(songData, id);
-
         return updated
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
@@ -74,8 +62,8 @@ public class SongDataController {
 
     @GetMapping(value = "/songs/data/to/song/{id}")
     public ResponseEntity<SongData> readToSong(@PathVariable(name = "id") int id) {
-        List o = songDataService.getByValue("song_id", id);
-        SongData songData = (SongData) o.get(o.size() - 1);
+        List<SongData> list = songDataService.getByValue("song_id", id);
+        SongData songData = (SongData) list.get(list.size() - 1);
         return songData != null ?
                 new ResponseEntity<>(songData, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -83,17 +71,9 @@ public class SongDataController {
 
     @GetMapping(value = "/songs/data/to/author/{id}")
     public ResponseEntity<List<SongData>> readToAuthor(@PathVariable(name = "id") int id) {
-        Object o = songDataService.getByValue("author_id", id);
-        final List<SongData> songsdata = new ArrayList<>();
-        List list = (List) o;
-        if (list.size() > 0) {
-            Iterator iterator = list.iterator();
-            while (iterator.hasNext()) {
-                songsdata.add((SongData) iterator.next());
-            }
-        }
-        return !songsdata.isEmpty() ?
-                new ResponseEntity<>(songsdata, HttpStatus.OK) :
+        List<SongData> list = songDataService.getByValue("author_id", id);
+        return !list.isEmpty() ?
+                new ResponseEntity<>(list, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

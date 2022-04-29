@@ -1,9 +1,10 @@
 package by.bsuir.spp_project.service.rest.social;
 
-import by.bsuir.spp_project.dao.PostgreSQLDAO;
+import by.bsuir.spp_project.dao.PostgreSQLCRUD;
 
+import by.bsuir.spp_project.dao.PostgreSQLgetByValue;
 import by.bsuir.spp_project.entity.social.Post;
-import by.bsuir.spp_project.service.rest.RestService;
+import by.bsuir.spp_project.service.rest.RestServiceCRUD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -14,19 +15,23 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-public class PostServiceImpl implements RestService<Post> {
-
+public class PostServiceCRUDImpl implements RestServiceCRUD<Post>, PostgreSQLgetByValue<Post> {
 
     private static final AtomicInteger POST_ID_HOLDER = new AtomicInteger();
 
-    @Autowired
-    @Qualifier("postDAO")
-    private PostgreSQLDAO<Post> postDAO;
+    private PostgreSQLCRUD<Post> postDAO;
 
+    private PostgreSQLgetByValue<Post> postgreSQLgetByValue;
+
+    @Autowired
+    public PostServiceCRUDImpl(@Qualifier("postDAO") PostgreSQLCRUD<Post> postDAO, @Qualifier("postDAO") PostgreSQLgetByValue<Post> postgreSQLgetByValue) {
+        this.postDAO = postDAO;
+        this.postgreSQLgetByValue = postgreSQLgetByValue;
+    }
 
     @PostConstruct
     private void init() {
-        POST_ID_HOLDER.set( postDAO.count());
+        POST_ID_HOLDER.set(postDAO.count());
     }
 
     @PreDestroy
@@ -64,6 +69,6 @@ public class PostServiceImpl implements RestService<Post> {
 
     @Override
     public List<Post> getByValue(String column, Integer value) {
-        return postDAO.getByValue(column, value);
+        return postgreSQLgetByValue.getByValue(column, value);
     }
 }

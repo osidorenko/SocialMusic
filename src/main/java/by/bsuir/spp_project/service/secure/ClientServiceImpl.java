@@ -2,23 +2,33 @@ package by.bsuir.spp_project.service.secure;
 
 import by.bsuir.spp_project.dao.secure.ClientPostgreSQLDAO;
 import by.bsuir.spp_project.entity.secure.Client;
+import by.bsuir.spp_project.entity.social.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BinaryOperator;
 
-@Service
-public class ClientServiceImpl implements ClientService {
+@Service("clientServiceImpl")
+public class ClientServiceImpl implements ClientService, UserDetailsService {
     private static final AtomicInteger CLIENT_ID_HOLDER = new AtomicInteger();
 
     @Autowired
     @Qualifier("clientPostgreSQLDAO")
     private ClientPostgreSQLDAO clientDAO;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @PostConstruct
     private void init() {
@@ -39,11 +49,10 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public boolean logIn(Client client, String pass) {
-        char[] a = clientDAO.getHash(client.getLogin());
-        char[] c = generateHashCode(pass);
+        String a = clientDAO.getHash(client.getLogin());
+        String c = generateHashCode(pass);
 
-        Boolean b = Arrays.equals(a, c);
-        if (b) {
+        if (a.equals(c)) {
             return clientDAO.updateStatus(client.getLogin(), true);
         }
         return false;
@@ -51,13 +60,13 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public boolean logOut(Client client, String pass) {
-        if (Arrays.equals(clientDAO.getHash(client.getLogin()), generateHashCode(pass))) {
+        if (clientDAO.getHash(client.getLogin()).equals( generateHashCode(pass))) {
             return clientDAO.updateStatus(client.getLogin(), false);
         }
         return false;
     }
 
-    public char[] generateHashCode(String password) {
+    public String generateHashCode(String password) {
         char[] arr = new char[50];
         char[] pass = password.toCharArray();
         long h = 1000;
@@ -76,6 +85,21 @@ public class ClientServiceImpl implements ClientService {
         while (x < 50) {
             arr[x++] = ' ';
         }
-        return arr;
+        return String.valueOf(arr);
+    }
+    public Client findById(Integer id){
+        return em.find(Client.class, id);
+    }
+
+    public Client byLogin(String login){
+        List<Client> all = em.createQuery("select u from Client u where u.login =:login ").setParameter("login", login).getResultList();
+        if(all.size() != 1){
+            throw new UsernameNotFoundException("var1");
+        }
+        return all.get(0);
+    }
+
+    public UserDetails loadUserByUsername(String var1) throws UsernameNotFoundException {
+        return byLogin(var1).details();
     }
 }

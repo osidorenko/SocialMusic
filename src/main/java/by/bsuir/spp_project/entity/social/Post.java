@@ -1,13 +1,25 @@
 package by.bsuir.spp_project.entity.social;
 
 import by.bsuir.spp_project.entity.files.Picture;
+import by.bsuir.spp_project.entity.music.SongM2M;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Time;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
-@Entity(name = "Post")
+@Data
+@Entity
 @Table(name = "posts")
 public class Post {
 
@@ -16,96 +28,71 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "author_id")
     private User user;
 
     @Column(name = "message")
     private String message;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "picture_id")
     private Picture picture;
 
     @Column(name = "song_name")
     private String songName;
 
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<Comment>();
+    private List<Comment> comments = new ArrayList<>();
 
-    @Column(name = "date")
-    private Long date;
+    @Column(name = "timestamp")
+    private Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
 
-    public Post() {
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SongM2M> songs = new ArrayList<>();
+
+
+//todo json ignor oneto many likes
+
+
+    public Post(Integer id) {
+        this.id = id;
     }
 
-    public Post(Integer id, User user, String message, Picture picture, String songName, List<Comment> comments, Long date) {
+    public Post() {
+
+    }
+
+    public Post(Integer id, User user, String message, Picture picture, String songName, List<Comment> comments, Timestamp time) {
         this.id = id;
         this.user = user;
         this.message = message;
         this.picture = picture;
         this.songName = songName;
         this.comments = comments;
-        this.date = date;
     }
 
-    public Post(Integer id, User user, String message, Picture picture, String songName, Long date) {
-        this.id = id;
-        this.user = user;
-        this.message = message;
-        this.picture = picture;
-        this.songName = songName;
-        this.date = new Date().getTime();
+    public String getDate() {
+        return LocalDate.ofInstant(timestamp.toInstant(), ZoneId.systemDefault()).toString();
     }
 
-
-    public Integer getId() {
-        return id;
+    public String getTime() {
+        return LocalDateTime.ofInstant(timestamp.toInstant(), ZoneId.systemDefault()).toLocalTime()
+                .format(DateTimeFormatter.ofPattern("H:mm:ss"));
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public List<Comment> getComments() {
+        return comments;
     }
 
-    public User getUser() {
-        return user;
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Picture getPicture() {
-        return picture;
-    }
-
-    public void setPicture(Picture picture) {
-        this.picture = picture;
-    }
-
-    public String getSongName() {
-        return songName;
-    }
-
-    public void setSongName(String songName) {
-        this.songName = songName;
-    }
-
-    public Long getDate() {
-        return date;
-    }
-
-    public void setDate(Long date) {
-        this.date = date;
-    }
 
     @Override
     public String toString() {
@@ -115,8 +102,8 @@ public class Post {
                 ", message='" + message + '\'' +
                 ", picture=" + picture +
                 ", songName='" + songName + '\'' +
-                ", comments=" + comments +
-                ", date=" + date +
+                ", date=" + getDate() +
+                ", time=" + getTime() +
                 '}';
     }
 }

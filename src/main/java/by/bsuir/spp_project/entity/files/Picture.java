@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class Picture {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer id;
 
     @Column(name = "name")
