@@ -55,4 +55,9 @@ public class PicturePostgreSQL implements PostgreSQLCRUD<Picture> {
     public boolean delete(int id) {
         return false;
     }
+
+    @Override
+    public int getNext() {
+        return 0;
+    }
 }

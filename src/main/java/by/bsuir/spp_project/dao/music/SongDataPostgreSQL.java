@@ -6,11 +6,14 @@ import by.bsuir.spp_project.dao.files.PictureRepository;
 import by.bsuir.spp_project.entity.files.Picture;
 import by.bsuir.spp_project.entity.music.Song;
 import by.bsuir.spp_project.entity.music.SongData;
+import org.hibernate.HibernateException;
+import org.hibernate.JDBCException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.ls.LSOutput;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -35,16 +38,28 @@ public class SongDataPostgreSQL implements PostgreSQLCRUD<SongData>, PostgreSQLg
 
     @Override
     public boolean create(SongData object) {
-        if (!songDataRepository.existsById(object.getId())) {
+        try {
+            object.getSong().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7);
             Song s = songRepository.save(object.getSong());
             object.getPicture().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7);
+            while (pictureRepository.existsById(object.getPicture().getId())) {
+                object.getPicture().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7 + 1);
+                System.err.println("picture set ID songData");
+            }
             Picture picture = pictureRepository.save(object.getPicture());
             object.setPicture(picture);
             object.setSong(s);
-            SongData songData = songDataRepository.save((SongData) object);
+            try {
+                SongData songData = songDataRepository.save((SongData) object);
+            } catch (Exception e) {
+                object.setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7);
+                SongData songData = songDataRepository.save((SongData) object);
+                e.printStackTrace();
+            }
             return true;
+        } catch (JDBCException e) {
+            return false;
         }
-        return false;
     }
 
     @Override
@@ -98,5 +113,10 @@ public class SongDataPostgreSQL implements PostgreSQLCRUD<SongData>, PostgreSQLg
             return true;
         }
         return false;
+    }
+
+    @Override
+    public int getNext() {
+        return songDataRepository.getNext() + 1;
     }
 }

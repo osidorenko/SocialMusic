@@ -16,5 +16,6 @@ public interface PostgreSQLCRUD<E> {
 
     public boolean delete(int id);
 
+    public int getNext();
 
 }

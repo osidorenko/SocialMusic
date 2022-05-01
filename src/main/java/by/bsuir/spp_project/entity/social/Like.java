@@ -19,6 +19,9 @@ public class Like {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @Column(name = "li")
+    private byte like;
+
     public Like() {
     }
 
@@ -28,10 +31,13 @@ public class Like {
         this.post = post;
     }
 
-
-    public Integer getId() {
-        return id;
+    public Like(Integer id, User user, Post post, byte like) {
+        this.id = id;
+        this.user = user;
+        this.post = post;
+        this.like = like;
     }
+
 
     public void setId(Integer id) {
         this.id = id;
@@ -51,6 +57,14 @@ public class Like {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public byte getLike() {
+        return like;
+    }
+
+    public void setLike(byte like) {
+        this.like = like;
     }
 
     @Override

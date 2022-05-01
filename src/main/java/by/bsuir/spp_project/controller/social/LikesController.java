@@ -24,15 +24,15 @@ public class LikesController {
         this.likeRepository = likeRepository;
     }
 
-    @PostMapping(value = "/likes/{post_id}/{user_id}")
-    public ResponseEntity<?> create(@PathVariable("post_id") int post_id, @PathVariable("user_id") int user_id) {
-        Like like = new Like(0, new User(user_id), new Post(post_id));
-        like.setId(LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3);
-        likeRepository.save(like);
+    @PostMapping(value = "/likes/{post_id}/{user_id}/{like}")
+    public ResponseEntity<?> create(@PathVariable("post_id") int post_id, @PathVariable("user_id") int user_id, @PathVariable("like") byte like) {
+        Like likel = new Like(0, new User(user_id), new Post(post_id), like);
+        likel.setId(LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3 + LocalTime.now().getMinute() + LocalTime.now().getSecond());
+        likeRepository.save(likel);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/likes/{post_id}/{user_id}")
+    @PostMapping(value = "/likes/{post_id}/{user_id}")
     public ResponseEntity<?> delete(@PathVariable("post_id") int post_id, @PathVariable("user_id") int user_id) {
         likeRepository.deleteLike(user_id, post_id);
         return new ResponseEntity<>(HttpStatus.OK);

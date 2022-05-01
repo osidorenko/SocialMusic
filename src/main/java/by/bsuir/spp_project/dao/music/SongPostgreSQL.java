@@ -67,4 +67,9 @@ public class SongPostgreSQL implements PostgreSQLCRUD<Song> {
         }
         return false;
     }
+
+    @Override
+    public int getNext() {
+        return 0;
+    }
 }

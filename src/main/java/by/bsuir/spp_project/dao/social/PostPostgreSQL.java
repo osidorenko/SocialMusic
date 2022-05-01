@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @Component("postDAO")
-public class PostPostgreSQL implements PostgreSQLCRUD<Post>, PostgreSQLgetByValue<Post> {
+public class PostPostgreSQL implements PostgreSQLCRUD<Post>, PostgreSQLgetByValue<Post>, PostgreSQLPost {
 
     private PostRepository postRepository;
     @Autowired
@@ -30,6 +30,10 @@ public class PostPostgreSQL implements PostgreSQLCRUD<Post>, PostgreSQLgetByValu
     public boolean create(Post object) {
         object.setId(LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3 - 7);
         object.getPicture().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7);
+        while (pictureRepository.existsById(object.getPicture().getId())) {
+            object.getPicture().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7 + 1);
+            System.err.println("picture set ID songData");
+        }
         Picture picture = pictureRepository.save(object.getPicture());
         object.setPicture(picture);
         postRepository.save(object);
@@ -71,6 +75,17 @@ public class PostPostgreSQL implements PostgreSQLCRUD<Post>, PostgreSQLgetByValu
             return true;
         }
         return false;
+    }
+
+    @Override
+    public int getNext() {
+        return 0;
+    }
+
+    @Override
+    public List<Object> getPostsByUser(Integer user_id) {
+        List<Object> list = postRepository.getPostsByUser(user_id);
+        return list;
     }
 
     @Override

@@ -18,5 +18,7 @@ public interface SongDataRepository extends JpaRepository<SongData, Integer> {
     @Query(value = "SELECT s FROM SongData s where s.user.id = :val ")
     public List<SongData> getByAuthorId(@Param("val") Integer val);
 
+    @Query(value = "SELECT MAX(id) FROM songs_data",nativeQuery = true)
+    public int getNext();
 
 }

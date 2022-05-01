@@ -68,6 +68,11 @@ public class CommentPostgreSQL implements PostgreSQLCRUD<Comment>, PostgreSQLget
     }
 
     @Override
+    public int getNext() {
+        return 0;
+    }
+
+    @Override
     public List<Comment> getByValue(String column, Integer value) {
         List<Comment> o = new ArrayList<Comment>();
         if (column.equals("author_id")) {

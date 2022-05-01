@@ -71,4 +71,9 @@ public class UserPostgreSQL implements PostgreSQLCRUD<User> {
         }
         return false;
     }
+
+    @Override
+    public int getNext() {
+        return 0;
+    }
 }

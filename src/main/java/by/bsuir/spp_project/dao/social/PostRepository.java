@@ -12,4 +12,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     @Query(value = "SELECT s FROM Post s where  s.user.id = :val ")
     public List<Post> getByAuthorId(@Param("val") Integer val);
+
+    @Query(value = "select P.id, P.timestamp from Post as P where P.user.id = :user_id order by P.timestamp")
+    public List<Object> getPostsByUser(@Param("user_id") Integer user_id);
 }

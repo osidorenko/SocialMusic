@@ -1,11 +1,13 @@
 package by.bsuir.spp_project.controller.social;
 
 
+import by.bsuir.spp_project.dao.social.PostRepository;
 import by.bsuir.spp_project.entity.social.Post;
 import by.bsuir.spp_project.service.rest.social.PostServiceCRUDImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +41,7 @@ public class PostController {
                 //entity :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     //@CrossOrigin
     @GetMapping(value = "/posts/{id}")
     public ResponseEntity<Post> read(@PathVariable(name = "id") int id) {
@@ -66,12 +69,17 @@ public class PostController {
     }
 
 
+    @Autowired
+    private PostRepository postRepository;
+
     @GetMapping(value = "/posts/to/author/{id}")
-    public ResponseEntity<List<Post>> readToAuthor(@PathVariable(name = "id") int id) {
-        List<Post> list = postService.getByValue("author_id", id);
+    public ResponseEntity<List<Object>> readToAuthor(@PathVariable(name = "id") int id) {
+        List<Object> list = postRepository.getPostsByUser(id);
+        //List<Post> list = postService.getByValue("author_id", id);
         return !list.isEmpty() ?
                 new ResponseEntity<>(list, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 
 }
