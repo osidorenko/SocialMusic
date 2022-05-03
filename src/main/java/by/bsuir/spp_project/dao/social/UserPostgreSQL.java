@@ -50,18 +50,15 @@ public class UserPostgreSQL implements PostgreSQLCRUD<User> {
     @Override
     public boolean update(User object, int id) {
         if (userRepository.existsById(id)) {
-            if (!pictureRepository.existsById(object.getPicture().getId()))
-                pictureRepository.saveAndFlush(object.getPicture());
-            else {
-                User tmp = userRepository.findById(id).get();
-                pictureRepository.updatePic(tmp.getPicture().getId(), object.getPicture().getName());
-            }
+            User tmp = userRepository.findById(id).get();
+            pictureRepository.updatePic(tmp.getPicture().getId(), object.getPicture().getName());
             object.setId(id);
             User u = userRepository.save(object);
             return true;
         }
         return false;
     }
+
 
     @Override
     public boolean delete(int id) {

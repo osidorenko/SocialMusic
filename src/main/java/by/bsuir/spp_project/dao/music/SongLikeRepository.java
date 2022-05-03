@@ -7,11 +7,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface SongLikeRepository extends JpaRepository<SongLike, Integer> {
 
+    @Query(value = "select S from SongLike S where S.user.id = :user_id")
+    public List<SongLike> getAllByUser(@Param("user_id") Integer user_id);
 
     @Transactional
     @Modifying
-    @Query(value = "delete from SongLike s where s.user = :user and s.songData= :song")
+    @Query(value = "delete from SongLike s where s.user.id = :user and s.songData.id= :song")
     public int deleteLike(@Param("user") int user, @Param("song") int song);
+
 }

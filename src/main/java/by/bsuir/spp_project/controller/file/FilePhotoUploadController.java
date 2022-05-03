@@ -37,7 +37,7 @@ public class FilePhotoUploadController {
         this.pictureRepository = pictureRepository;
     }
 
-    @PostMapping("/upload/photo")
+    @PostMapping("/app/upload/photo")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
         try {
@@ -56,7 +56,7 @@ public class FilePhotoUploadController {
         }
     }
 
-    @GetMapping("/files/photo")
+    @GetMapping("/app/files/photo")
     public ResponseEntity<List<FileInfo>> getListFiles() {
         List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
             String filename = path.getFileName().toString();
@@ -67,7 +67,7 @@ public class FilePhotoUploadController {
         return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
     }
 
-    @GetMapping("/files/photo/{filename:.+}")
+    @GetMapping("/app/files/photo/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
         Resource file = storageService.load(filename);

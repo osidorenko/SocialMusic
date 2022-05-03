@@ -1,6 +1,7 @@
 package by.bsuir.spp_project.controller.social;
 
 
+import by.bsuir.spp_project.controller.file.ResponseMessage;
 import by.bsuir.spp_project.dao.social.PostRepository;
 import by.bsuir.spp_project.entity.social.Post;
 import by.bsuir.spp_project.service.rest.social.PostServiceCRUDImpl;
@@ -23,13 +24,17 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PostMapping(value = "/posts")
+    @PostMapping(value = "/app/posts")
     public ResponseEntity<?> create(@RequestBody Post post) {
         postService.create(post);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        int last = postService.getLast();
+        if (last != 0) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(last);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping(value = "/posts")
+    @GetMapping(value = "/app/posts")
     //@CrossOrigin
     public ResponseEntity<List<Post>> read() {
         List<Post> list = postService.readAll();
@@ -43,7 +48,7 @@ public class PostController {
     }
 
     //@CrossOrigin
-    @GetMapping(value = "/posts/{id}")
+    @GetMapping(value = "/app/posts/{id}")
     public ResponseEntity<Post> read(@PathVariable(name = "id") int id) {
         final Post post = postService.readById(id);
         return post != null ?
@@ -51,7 +56,7 @@ public class PostController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping(value = "/posts/{id}")
+    @PutMapping(value = "/app/posts/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody Post post) {
         final boolean updated = postService.update(post, id);
         return updated
@@ -59,7 +64,7 @@ public class PostController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @DeleteMapping(value = "/posts/{id}")
+    @DeleteMapping(value = "/app/posts/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
         final boolean deleted = postService.delete(id);
 
@@ -72,10 +77,18 @@ public class PostController {
     @Autowired
     private PostRepository postRepository;
 
-    @GetMapping(value = "/posts/to/author/{id}")
+    @GetMapping(value = "/app/posts/to/author/{id}")
     public ResponseEntity<List<Object>> readToAuthor(@PathVariable(name = "id") int id) {
         List<Object> list = postRepository.getPostsByUser(id);
         //List<Post> list = postService.getByValue("author_id", id);
+        return !list.isEmpty() ?
+                new ResponseEntity<>(list, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value = "/app/posts/all")
+    public ResponseEntity<List<Object>> readToAuthor() {
+        List<Object> list = postRepository.getAllPosts();
         return !list.isEmpty() ?
                 new ResponseEntity<>(list, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -31,7 +31,7 @@ public class FileMusicUploadController {
 
     }
 
-    @PostMapping("/upload/music")
+    @PostMapping("/app/upload/music")
     public ResponseEntity<ResponseMessage> uploadFile(
             @RequestParam("file") MultipartFile file) {
         String message = "";
@@ -45,18 +45,8 @@ public class FileMusicUploadController {
         }
     }
 
-    @GetMapping("/pic")
-    public ResponseEntity<List<FileInfo>> getTest() {
-        List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
-            String filename = path.getFileName().toString();
-            String url = MvcUriComponentsBuilder
-                    .fromMethodName(FileMusicUploadController.class, "getFile", path.getFileName().toString()).build().toString();
-            return new FileInfo(filename, url);
-        }).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
-    }
 
-    @GetMapping("/files/music")
+    @GetMapping("/app/files/music")
     public ResponseEntity<List<FileInfo>> getListFiles() {
         List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
             String filename = path.getFileName().toString();
@@ -67,7 +57,7 @@ public class FileMusicUploadController {
         return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
     }
 
-    @GetMapping("/files/music/{filename:.+}")
+    @GetMapping("/app/files/music/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
         Resource file = storageService.load(filename);

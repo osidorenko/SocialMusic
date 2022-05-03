@@ -11,9 +11,6 @@ drop table songs_m2m_post;
 drop table users_data;
 
 
-
-
-
     create table clients_data
 (
     id        serial
@@ -61,16 +58,6 @@ create table likes_m2m_song
 alter table likes_m2m_song
     owner to music_admin;
 
-create table likes_m2m_song
-(
-    id           serial
-        primary key,
-    author_id    serial,
-    song_data_id serial
-);
-
-alter table likes_m2m_song
-    owner to music_admin;
 
 
 create table posts
@@ -138,4 +125,11 @@ create table users_data
 
 alter table users_data
     owner to music_admin;
+
+create table pictures
+(
+    id   serial
+        primary key,
+    name varchar(50)
+);
 

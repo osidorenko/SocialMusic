@@ -4,6 +4,8 @@ import by.bsuir.spp_project.entity.files.Picture;
 import by.bsuir.spp_project.entity.social.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "songs_data")
@@ -27,6 +29,11 @@ public class SongData {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "song_id")
     private Song song;
+
+/*
+    @OneToMany(mappedBy = "songData", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SongLike> likes = new ArrayList<>();
+*/
 
     public SongData() {
     }
@@ -84,5 +91,6 @@ public class SongData {
     public void setSong(Song song) {
         this.song = song;
     }
+
 
 }

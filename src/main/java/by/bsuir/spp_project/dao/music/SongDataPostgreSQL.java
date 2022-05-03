@@ -39,9 +39,9 @@ public class SongDataPostgreSQL implements PostgreSQLCRUD<SongData>, PostgreSQLg
     @Override
     public boolean create(SongData object) {
         try {
-            object.getSong().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7);
+            object.getSong().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7 + LocalTime.now().getHour() * 17);
             Song s = songRepository.save(object.getSong());
-            object.getPicture().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7);
+            object.getPicture().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7 + LocalTime.now().getHour() * 17 + 2);
             while (pictureRepository.existsById(object.getPicture().getId())) {
                 object.getPicture().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7 + 1);
                 System.err.println("picture set ID songData");
@@ -50,6 +50,7 @@ public class SongDataPostgreSQL implements PostgreSQLCRUD<SongData>, PostgreSQLg
             object.setPicture(picture);
             object.setSong(s);
             try {
+                object.setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7 + LocalTime.now().getHour() * 17 + 19);
                 SongData songData = songDataRepository.save((SongData) object);
             } catch (Exception e) {
                 object.setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7);

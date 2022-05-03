@@ -19,19 +19,19 @@ public class SongController {
         this.songService = songService;
     }
 
-    @PostMapping(value = "/songs")
+    @PostMapping(value = "/app/songs")
     public ResponseEntity<?> create(@RequestBody Song song) {
         songService.create(song);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    @PostMapping(value = "/songs/stop")
+    @PostMapping(value = "/app/songs/stop")
     public ResponseEntity<?> delete() {
         songService.destroy();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/songs")
+    @GetMapping(value = "/app/songs")
     public ResponseEntity<List<Song>> read() {
         List<Song> list = songService.readAll();
         return !list.isEmpty() ?
@@ -39,7 +39,7 @@ public class SongController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/songs/{id}")
+    @GetMapping(value = "/app/songs/{id}")
     public ResponseEntity<Song> read(@PathVariable(name = "id") int id) {
         final Song users = (Song) songService.readById(id);
         return users != null ?
@@ -47,7 +47,7 @@ public class SongController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping(value = "/songs/{id}")
+    @PutMapping(value = "/app/songs/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody Song song) {
         final boolean updated = songService.update(song, id);
         return updated
@@ -55,7 +55,7 @@ public class SongController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @DeleteMapping(value = "/songs/{id}")
+    @DeleteMapping(value = "/app/songs/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
         final boolean deleted = songService.delete(id);
 

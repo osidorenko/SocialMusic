@@ -15,4 +15,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     @Query(value = "select P.id, P.timestamp from Post as P where P.user.id = :user_id order by P.timestamp")
     public List<Object> getPostsByUser(@Param("user_id") Integer user_id);
+
+    @Query(value = "select P.id, P.timestamp from Post as P order by P.timestamp")
+    public List<Object> getAllPosts();
 }

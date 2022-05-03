@@ -26,18 +26,27 @@ public class PostPostgreSQL implements PostgreSQLCRUD<Post>, PostgreSQLgetByValu
         this.postRepository = postRepository;
     }
 
+    private static int last = 0;
+
     @Override
     public boolean create(Post object) {
         object.setId(LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3 - 7);
-        object.getPicture().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7);
+        object.getPicture().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7 + LocalTime.now().getHour() * 17);
         while (pictureRepository.existsById(object.getPicture().getId())) {
             object.getPicture().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7 + 1);
             System.err.println("picture set ID songData");
         }
         Picture picture = pictureRepository.save(object.getPicture());
         object.setPicture(picture);
-        postRepository.save(object);
+        Post post = postRepository.save(object);
+        last = post.getId();
+        ;
         return true;
+    }
+
+    @Override
+    public int getLast() {
+        return last;
     }
 
     @Override

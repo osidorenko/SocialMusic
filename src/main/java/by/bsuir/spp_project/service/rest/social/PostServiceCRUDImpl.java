@@ -3,6 +3,7 @@ package by.bsuir.spp_project.service.rest.social;
 import by.bsuir.spp_project.dao.PostgreSQLCRUD;
 
 import by.bsuir.spp_project.dao.PostgreSQLgetByValue;
+import by.bsuir.spp_project.dao.social.PostgreSQLPost;
 import by.bsuir.spp_project.entity.social.Post;
 import by.bsuir.spp_project.service.rest.RestServiceCRUD;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,13 @@ public class PostServiceCRUDImpl implements RestServiceCRUD<Post>, PostgreSQLget
 
     private PostgreSQLgetByValue<Post> postgreSQLgetByValue;
 
+    private PostgreSQLPost postgreSQLPost;
+
     @Autowired
-    public PostServiceCRUDImpl(@Qualifier("postDAO") PostgreSQLCRUD<Post> postDAO, @Qualifier("postDAO") PostgreSQLgetByValue<Post> postgreSQLgetByValue) {
+    public PostServiceCRUDImpl(@Qualifier("postDAO") PostgreSQLCRUD<Post> postDAO, @Qualifier("postDAO") PostgreSQLgetByValue<Post> postgreSQLgetByValue, @Qualifier("postDAO") PostgreSQLPost postgreSQLPost) {
         this.postDAO = postDAO;
         this.postgreSQLgetByValue = postgreSQLgetByValue;
+        this.postgreSQLPost = postgreSQLPost;
     }
 
     @PostConstruct
@@ -70,5 +74,9 @@ public class PostServiceCRUDImpl implements RestServiceCRUD<Post>, PostgreSQLget
     @Override
     public List<Post> getByValue(String column, Integer value) {
         return postgreSQLgetByValue.getByValue(column, value);
+    }
+
+    public int getLast() {
+        return postgreSQLPost.getLast();
     }
 }

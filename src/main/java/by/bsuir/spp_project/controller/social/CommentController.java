@@ -22,13 +22,13 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @PostMapping(value = "/comments")
+    @PostMapping(value = "/app/comments")
     public ResponseEntity<?> create(@RequestBody Comment comment) {
         commentService.create(comment);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/comments")
+    @GetMapping(value = "/app/comments")
     public ResponseEntity<List<Comment>> read() {
         List<Comment> list = commentService.readAll();
         return !list.isEmpty() ?
@@ -39,7 +39,7 @@ public class CommentController {
 
 
 
-    @GetMapping(value = "/comments/{id}")
+    @GetMapping(value = "/app/comments/{id}")
     public ResponseEntity<Comment> read(@PathVariable(name = "id") int id) {
         final Comment com = commentService.readById(id);
         return com != null ?
@@ -47,7 +47,7 @@ public class CommentController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping(value = "/comments/{id}")
+    @PutMapping(value = "/app/comments/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody Comment com) {
         final boolean updated = commentService.update(com, id);
 
@@ -56,7 +56,7 @@ public class CommentController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @DeleteMapping(value = "/comments/{id}")
+    @DeleteMapping(value = "/app/comments/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
         final boolean deleted = commentService.delete(id);
 
@@ -65,7 +65,7 @@ public class CommentController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @GetMapping(value = "/comments/to/author/{id}")
+    @GetMapping(value = "/app/comments/to/author/{id}")
     public ResponseEntity<List<Comment>> readToAuthor(@PathVariable(name = "id") int id) {
         Object o = commentService.getByValue("author_id", id);
         final List<Comment> comments = new ArrayList<>();
@@ -80,7 +80,7 @@ public class CommentController {
                 new ResponseEntity<>(comments, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    @GetMapping(value = "/comments/to/post/{id}")
+    @GetMapping(value = "/app/comments/to/post/{id}")
     public ResponseEntity<List<Comment>> readToPost(@PathVariable(name = "id") int id) {
         Object o = commentService.getByValue("post_id", id);
         final List<Comment> comments = new ArrayList<>();
