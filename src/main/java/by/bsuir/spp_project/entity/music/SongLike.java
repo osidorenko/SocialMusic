@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class SongLike {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer id;
     @ManyToOne
     @JoinColumn(name = "author_id")

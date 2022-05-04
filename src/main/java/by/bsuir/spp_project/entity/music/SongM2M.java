@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class SongM2M {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer id;
 
     @ManyToOne

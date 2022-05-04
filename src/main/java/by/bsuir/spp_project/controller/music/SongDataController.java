@@ -1,9 +1,13 @@
 package by.bsuir.spp_project.controller.music;
 
 
+import by.bsuir.spp_project.dao.music.SongDataRepository;
 import by.bsuir.spp_project.dao.music.SongLikeRepository;
+import by.bsuir.spp_project.dao.music.SongRepository;
+import by.bsuir.spp_project.entity.music.Song;
 import by.bsuir.spp_project.entity.music.SongData;
 import by.bsuir.spp_project.entity.music.SongLike;
+import by.bsuir.spp_project.entity.social.User;
 import by.bsuir.spp_project.service.rest.music.SongDataServiceImplCRUD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -97,4 +101,26 @@ public class SongDataController {
                 new ResponseEntity<>(list, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+
+    @Autowired
+    private SongRepository songRepository;
+    @Autowired
+    private SongDataRepository songDataRepository;
+
+    @GetMapping(value = "/app/songs/by/pattern/{pattern}")
+    public ResponseEntity<List<SongData>> readByPatter(@PathVariable(name = "pattern") String pattern) {
+        List<Song> songs1 = songRepository.getAllByPatternAuthor(pattern + "%");
+        List<Song> songs2 = songRepository.getAllByPatternName(pattern + "%");
+        songs1.addAll(songs2);
+        List<SongData> list = new ArrayList<>();
+        for (int i = 0; i < songs1.size(); i++) {
+            list.addAll(songDataRepository.getSongDataBySong_Id(songs1.get(i).getId()));
+        }
+        return !list.isEmpty() ?
+                new ResponseEntity<>(list, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+
 }

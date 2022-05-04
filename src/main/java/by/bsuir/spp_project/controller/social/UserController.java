@@ -1,6 +1,8 @@
 package by.bsuir.spp_project.controller.social;
 
 
+import by.bsuir.spp_project.dao.social.UserRepository;
+import by.bsuir.spp_project.entity.social.Post;
 import by.bsuir.spp_project.entity.social.User;
 import by.bsuir.spp_project.service.rest.social.UserServiceCRUDImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,9 @@ import java.util.List;
 
 @RestController
 public class UserController {
+
+    @Autowired
+    private UserRepository userRepository;
 
     private final UserServiceCRUDImpl userService;
 
@@ -57,5 +62,15 @@ public class UserController {
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
+
+
+    @GetMapping(value = "/app/users/by/pattern/{pattern}")
+    public ResponseEntity<List<User>> readByPatter(@PathVariable(name = "pattern") String pattern) {
+        List<User> list = userRepository.getAllByPattern(pattern + "%");
+        return !list.isEmpty() ?
+                new ResponseEntity<>(list, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
 
 }

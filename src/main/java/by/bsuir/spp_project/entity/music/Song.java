@@ -9,7 +9,7 @@ public class Song {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer id;
 
     @Column(name = "name")
@@ -35,7 +35,6 @@ public class Song {
         this.lasting = lasting;
         this.gengre = Gengre.DEFAULT.toString();
     }
-
 
 
     public Song(Integer id, String name, String author, Double lasting, Double raiting, String gengre) {

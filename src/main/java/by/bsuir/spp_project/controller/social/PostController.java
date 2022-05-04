@@ -94,5 +94,11 @@ public class PostController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-
+    @GetMapping(value = "/app/posts/by/pattern/{pattern}")
+    public ResponseEntity<List<Object>> readByPatter(@PathVariable(name = "pattern") String pattern) {
+        List<Object> list = postRepository.getAllByPattern(pattern + "%");
+        return !list.isEmpty() ?
+                new ResponseEntity<>(list, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }

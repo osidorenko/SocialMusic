@@ -18,4 +18,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     @Query(value = "select P.id, P.timestamp from Post as P order by P.timestamp")
     public List<Object> getAllPosts();
+
+    @Query(value = "select P.id, P.timestamp from Post as P where P.message like :pattern order by P.timestamp")
+    public List<Object> getAllByPattern(@Param("pattern") String pattern);
 }

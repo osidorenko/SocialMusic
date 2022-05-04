@@ -12,7 +12,6 @@ import java.util.List;
 public class SongData {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne

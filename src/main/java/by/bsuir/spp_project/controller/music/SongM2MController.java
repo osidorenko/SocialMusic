@@ -26,7 +26,8 @@ public class SongM2MController {
     @PostMapping(value = "/app/songs/to/post/{post_id}/{song_id}")
     public ResponseEntity<?> create(@PathVariable("post_id") int post_id, @PathVariable("song_id") int song_id) {
         SongM2M songM2M = new SongM2M(0, new Post(post_id), new SongData(song_id));
-        songM2M.setId(LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3);
+        songM2M.setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3 + LocalTime.now().getNano() - song_id * 17) % Integer.MAX_VALUE);
+        System.out.println("add song to post id" + songM2M.getId());
         songM2MRepository.save(songM2M);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
