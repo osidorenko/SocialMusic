@@ -10,8 +10,5 @@ class ClientServiceImplTest {
 
     @Test
     void generateHashCode() {
-        ClientServiceImpl c = new ClientServiceImpl();
-        String a = c.generateHashCode("pidor");
-        System.out.println(a);
     }
 }

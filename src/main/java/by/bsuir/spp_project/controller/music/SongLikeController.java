@@ -19,18 +19,20 @@ import java.util.List;
 @RestController
 public class SongLikeController {
 
-    private SongLikeRepository songLikeRepository;
+    private final SongLikeRepository songLikeRepository;
 
     @Autowired
-    public SongLikeController(SongLikeRepository songLikeRepository) {
+    public SongLikeController(
+            SongLikeRepository songLikeRepository
+    ) {
         this.songLikeRepository = songLikeRepository;
     }
 
     @PostMapping(value = "/app/likes/song/add/{song_id}/{user_id}")
     public ResponseEntity<?> create(@PathVariable("song_id") int song_id, @PathVariable("user_id") int user_id) {
-        SongLike songLike = new SongLike(0, new User(user_id), new SongData(song_id));
-        songLike.setId(LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3 + LocalTime.now().getMinute() + LocalTime.now().getSecond());
-        songLikeRepository.save(songLike);
+        //SongLike songLike = new SongLike(new User(user_id), new SongData(song_id));
+        SongLike songLike = new SongLike(user_id, song_id);
+        SongLike test = songLikeRepository.save(songLike);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -55,5 +57,4 @@ public class SongLikeController {
                 new ResponseEntity<>(list, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
 }

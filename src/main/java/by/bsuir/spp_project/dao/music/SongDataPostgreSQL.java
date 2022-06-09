@@ -19,7 +19,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository("songDataDAO")
+    @Repository("songDataDAO")
 public class SongDataPostgreSQL implements PostgreSQLCRUD<SongData>, PostgreSQLgetByValue<SongData> {
 
 
@@ -38,6 +38,7 @@ public class SongDataPostgreSQL implements PostgreSQLCRUD<SongData>, PostgreSQLg
 
     @Override
     public boolean create(SongData object) {
+        //todo ref this shit
         try {
             object.setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7 + LocalTime.now().getHour() * 13);
             object.getSong().setId((LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3) * 7 + LocalTime.now().getHour() * 17);

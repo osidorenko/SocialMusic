@@ -26,8 +26,7 @@ public class LikesController {
 
     @PostMapping(value = "/app/likes/{post_id}/{user_id}/{like}")
     public ResponseEntity<?> create(@PathVariable("post_id") int post_id, @PathVariable("user_id") int user_id, @PathVariable("like") byte like) {
-        Like likel = new Like(0, new User(user_id), new Post(post_id), like);
-        likel.setId(LocalTime.now().getMinute() + LocalTime.now().getSecond() * 3 + LocalTime.now().getMinute() + LocalTime.now().getSecond());
+        Like likel = new Like(user_id, post_id, like);
         likeRepository.save(likel);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -37,6 +36,7 @@ public class LikesController {
         likeRepository.deleteLike(user_id, post_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+/*
 
     @GetMapping(value = "/app/likes")
     public ResponseEntity<List<Like>> read() {
@@ -45,6 +45,7 @@ public class LikesController {
                 new ResponseEntity<>(list, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+*/
 
 
 }

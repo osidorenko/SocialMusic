@@ -1,8 +1,10 @@
 package by.bsuir.spp_project.controller.music;
 
+import by.bsuir.spp_project.dao.music.SongPostgreSQL;
 import by.bsuir.spp_project.entity.music.Song;
-import by.bsuir.spp_project.service.rest.music.SongServiceCRUDImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +13,12 @@ import java.util.List;
 
 @RestController
 public class SongController {
-    private final SongServiceCRUDImpl songService;
 
+
+    private final SongPostgreSQL songService;
 
     @Autowired
-    public SongController(SongServiceCRUDImpl songService) {
+    public SongController(@Qualifier("songDAO") SongPostgreSQL songService) {
         this.songService = songService;
     }
 
@@ -25,11 +28,7 @@ public class SongController {
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    @PostMapping(value = "/app/songs/stop")
-    public ResponseEntity<?> delete() {
-        songService.destroy();
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+
 
     @GetMapping(value = "/app/songs")
     public ResponseEntity<List<Song>> read() {

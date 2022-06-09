@@ -2,10 +2,12 @@ package by.bsuir.spp_project.controller.social;
 
 
 import by.bsuir.spp_project.controller.file.ResponseMessage;
+import by.bsuir.spp_project.dao.social.PostPostgreSQL;
 import by.bsuir.spp_project.dao.social.PostRepository;
 import by.bsuir.spp_project.entity.social.Post;
-import by.bsuir.spp_project.service.rest.social.PostServiceCRUDImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
@@ -14,15 +16,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
-//@CrossOrigin
 public class PostController {
-    private final PostServiceCRUDImpl postService;
+    @Qualifier("postDAO")
+    @Autowired
+    private final PostPostgreSQL postService;
 
     @Autowired
-    public PostController(PostServiceCRUDImpl postService) {
+    private final PostRepository postRepository;
+
+    @Autowired
+    public PostController(
+            @Qualifier("postDAO") PostPostgreSQL postService,
+            PostRepository postRepository
+    ) {
         this.postService = postService;
+        this.postRepository = postRepository;
     }
+
 
     @PostMapping(value = "/app/posts")
     public ResponseEntity<?> create(@RequestBody Post post) {
@@ -35,19 +45,16 @@ public class PostController {
     }
 
     @GetMapping(value = "/app/posts")
-    //@CrossOrigin
+
     public ResponseEntity<List<Post>> read() {
         List<Post> list = postService.readAll();
-        //ResponseEntity<List<Post>> entity = new ResponseEntity<>(list, HttpStatus.OK);
-
-        ResponseEntity<List<Post>> entity = ResponseEntity.ok().header("Access-Control-Allow-Origin", "*").body(list);
+        //ResponseEntity<List<Post>> entity = ResponseEntity.ok().header("Access-Control-Allow-Origin", "*").body(list);
         return !list.isEmpty() ?
                 new ResponseEntity<>(list, HttpStatus.OK) :
-                //entity :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    //@CrossOrigin
+
     @GetMapping(value = "/app/posts/{id}")
     public ResponseEntity<Post> read(@PathVariable(name = "id") int id) {
         final Post post = postService.readById(id);
@@ -74,13 +81,9 @@ public class PostController {
     }
 
 
-    @Autowired
-    private PostRepository postRepository;
-
     @GetMapping(value = "/app/posts/to/author/{id}")
     public ResponseEntity<List<Object>> readToAuthor(@PathVariable(name = "id") int id) {
         List<Object> list = postRepository.getPostsByUser(id);
-        //List<Post> list = postService.getByValue("author_id", id);
         return !list.isEmpty() ?
                 new ResponseEntity<>(list, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);

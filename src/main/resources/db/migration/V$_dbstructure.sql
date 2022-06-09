@@ -1,3 +1,15 @@
+drop table clients_data;
+drop table comments;
+drop table likes_m2m_post;
+drop table likes_m2m_song;
+drop table pictures;
+drop table posts;
+drop table songs;
+drop table songs_data;
+drop table songs_m2m_post;
+drop table users_data;
+
+
 create table clients_data
 (
     id        serial
@@ -25,10 +37,10 @@ create table comments
 
 create table likes_m2m_post
 (
-
     author_id serial,
     post_id   serial,
-    li        serial
+    li        serial,
+    PRIMARY KEY (author_id, post_id)
 
 );
 
@@ -37,9 +49,9 @@ alter table likes_m2m_post
 
 create table likes_m2m_song
 (
-
     author_id    serial,
-    song_data_id serial
+    song_data_id serial,
+    PRIMARY KEY (author_id, song_data_id)
 );
 
 alter table likes_m2m_song
@@ -93,6 +105,8 @@ alter table songs_data
 
 create table songs_m2m_post
 (
+    id           serial
+        primary key,
     post_id      serial,
     song_data_id serial
 );

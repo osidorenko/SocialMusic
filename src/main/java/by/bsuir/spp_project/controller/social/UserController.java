@@ -1,11 +1,12 @@
 package by.bsuir.spp_project.controller.social;
 
 
+import by.bsuir.spp_project.dao.social.UserPostgreSQL;
 import by.bsuir.spp_project.dao.social.UserRepository;
 import by.bsuir.spp_project.entity.social.Post;
 import by.bsuir.spp_project.entity.social.User;
-import by.bsuir.spp_project.service.rest.social.UserServiceCRUDImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,15 +16,20 @@ import java.util.List;
 @RestController
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
 
-    private final UserServiceCRUDImpl userService;
+    private final UserRepository userRepository;
+
+    private final UserPostgreSQL userService;
 
     @Autowired
-    public UserController(UserServiceCRUDImpl userService) {
+    public UserController(
+            UserRepository userRepository,
+            @Qualifier("userDAO") UserPostgreSQL userService
+    ) {
+        this.userRepository = userRepository;
         this.userService = userService;
     }
+
 
     @PostMapping(value = "/app/users")
     public ResponseEntity<?> create(@RequestBody User user) {

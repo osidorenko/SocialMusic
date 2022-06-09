@@ -1,23 +1,24 @@
 package by.bsuir.spp_project.entity.social;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "likes_m2m_post")
+@Data
+@IdClass(LikeKey.class)
 public class Like {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "author_id")
+    private Integer user;
 
-    private Integer id;
-
-    @ManyToOne
-    @JoinColumn(name = "author_id")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @Id
+    @Column(name = "post_id")
+    private Integer post;
 
     @Column(name = "li")
     private byte like;
@@ -25,54 +26,10 @@ public class Like {
     public Like() {
     }
 
-    public Like(Integer id, User user, Post post) {
-        this.id = id;
-        this.user = user;
-        this.post = post;
-    }
-
-    public Like(Integer id, User user, Post post, byte like) {
-        this.id = id;
+    public Like(Integer user, Integer post, byte like) {
         this.user = user;
         this.post = post;
         this.like = like;
     }
 
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getUser() {
-        return user.getId();
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Integer getPost() {
-        return post.getId();
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
-    public byte getLike() {
-        return like;
-    }
-
-    public void setLike(byte like) {
-        this.like = like;
-    }
-
-    @Override
-    public String toString() {
-        return "Like{" +
-                "id=" + id +
-                ", user=" + user +
-                ", post=" + post +
-                '}';
-    }
 }

@@ -31,12 +31,7 @@ public class SongM2MController {
         songM2MRepository.save(songM2M);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-/*
-    @DeleteMapping(value = "/songs/to/post/{post_id}/{user_id}")
-    public ResponseEntity<?> delete(@PathVariable("post_id") int post_id, @PathVariable("user_id") int user_id) {
-        songM2MRepository.deleteLike(user_id, post_id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }*/
+
 
     @GetMapping(value = "/app/songs/to/post")
     public ResponseEntity<List<SongM2M>> read() {

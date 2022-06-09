@@ -2,6 +2,7 @@ package by.bsuir.spp_project.entity.social;
 
 import by.bsuir.spp_project.entity.files.Picture;
 import by.bsuir.spp_project.entity.music.SongData;
+import by.bsuir.spp_project.entity.view.View;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
@@ -43,6 +44,7 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes = new ArrayList<>();
+
 
     //todo json ignor oneto many likes
 
